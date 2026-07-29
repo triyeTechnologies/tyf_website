@@ -1,55 +1,76 @@
 /**
- * Schema migrations, applied in order and tracked with SQLite's `user_version`.
+ * Schema migrations, applied in order and tracked in a `schema_migrations`
+ * table (Postgres has no `user_version` pragma to lean on).
  *
  * Never edit a migration that has shipped — append a new one instead.
+ *
+ * These are NOT run on boot in production: several serverless instances can
+ * start at once and would race each other. Run `npm run db:migrate` as a
+ * deploy step instead. Local development migrates on start for convenience.
  */
+import { transaction, one, query } from './index.js';
 import { logger } from '../utils/logger.js';
 
 export const migrations = [
   {
     id: 1,
     name: 'waitlist + pilot requests',
-    up(db) {
-      db.exec(`
+    async up(db) {
+      await db.query(`
         CREATE TABLE waitlist_members (
-          id          INTEGER PRIMARY KEY AUTOINCREMENT,
-          email       TEXT    NOT NULL UNIQUE COLLATE NOCASE,
-          source      TEXT    NOT NULL DEFAULT 'site',
-          referrer    TEXT,
-          user_agent  TEXT,
-          ip_hash     TEXT,
-          created_at  TEXT    NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now'))
-        );
-
-        CREATE INDEX idx_waitlist_created_at ON waitlist_members (created_at DESC);
-
-        CREATE TABLE pilot_requests (
-          id              INTEGER PRIMARY KEY AUTOINCREMENT,
-          name            TEXT    NOT NULL,
-          company         TEXT    NOT NULL,
-          email           TEXT    NOT NULL,
-          phone           TEXT,
-          website         TEXT,
-          segment         TEXT,
-          catalogue_size  TEXT,
-          monthly_volume  TEXT,
-          message         TEXT,
-          status          TEXT    NOT NULL DEFAULT 'new',
-          user_agent      TEXT,
-          ip_hash         TEXT,
-          created_at      TEXT    NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now'))
-        );
-
-        CREATE INDEX idx_pilot_created_at ON pilot_requests (created_at DESC);
-        CREATE INDEX idx_pilot_status     ON pilot_requests (status);
+          id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+          -- normalised to lowercase before it ever reaches here, so a plain
+          -- unique constraint is genuinely case-insensitive in practice
+          email       text        NOT NULL UNIQUE,
+          source      text        NOT NULL DEFAULT 'site',
+          referrer    text,
+          user_agent  text,
+          ip_hash     text,
+          created_at  timestamptz NOT NULL DEFAULT now()
+        )
       `);
+      await db.query('CREATE INDEX idx_waitlist_created_at ON waitlist_members (created_at DESC)');
+
+      await db.query(`
+        CREATE TABLE pilot_requests (
+          id              bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+          name            text        NOT NULL,
+          company         text        NOT NULL,
+          email           text        NOT NULL,
+          phone           text,
+          website         text,
+          segment         text,
+          catalogue_size  text,
+          monthly_volume  text,
+          message         text,
+          status          text        NOT NULL DEFAULT 'new',
+          user_agent      text,
+          ip_hash         text,
+          created_at      timestamptz NOT NULL DEFAULT now()
+        )
+      `);
+      await db.query('CREATE INDEX idx_pilot_created_at ON pilot_requests (created_at DESC)');
+      await db.query('CREATE INDEX idx_pilot_status ON pilot_requests (status)');
     },
   },
 ];
 
-/** Runs every migration newer than the database's current `user_version`. */
-export function runMigrations(db) {
-  const { user_version: current } = db.prepare('PRAGMA user_version').get();
+async function ensureMigrationsTable() {
+  await query(`
+    CREATE TABLE IF NOT EXISTS schema_migrations (
+      id          integer     PRIMARY KEY,
+      name        text        NOT NULL,
+      applied_at  timestamptz NOT NULL DEFAULT now()
+    )
+  `);
+}
+
+/** Applies every migration that has not run yet. Safe to call repeatedly. */
+export async function runMigrations() {
+  await ensureMigrationsTable();
+
+  const row = await one('SELECT COALESCE(MAX(id), 0) AS version FROM schema_migrations');
+  const current = row?.version ?? 0;
   const pending = migrations.filter((migration) => migration.id > current);
 
   if (pending.length === 0) {
@@ -59,19 +80,19 @@ export function runMigrations(db) {
 
   let version = current;
   for (const migration of pending) {
-    db.exec('BEGIN');
-    try {
-      migration.up(db);
-      // PRAGMA statements cannot be parameterised; the id is a literal in code.
-      db.exec(`PRAGMA user_version = ${Number(migration.id)}`);
-      db.exec('COMMIT');
-      version = migration.id;
-      logger.info(`db migrated to v${migration.id} — ${migration.name}`);
-    } catch (error) {
-      db.exec('ROLLBACK');
-      throw new Error(`Migration ${migration.id} (${migration.name}) failed: ${error.message}`);
-    }
+    // Postgres runs DDL transactionally, so a failed migration leaves nothing
+    // half-applied.
+    await transaction(async (db) => {
+      await migration.up(db);
+      await db.run('INSERT INTO schema_migrations (id, name) VALUES ($1, $2)', [
+        migration.id,
+        migration.name,
+      ]);
+    });
+    version = migration.id;
+    logger.info(`db migrated to v${migration.id} — ${migration.name}`);
   }
+
   return version;
 }
 

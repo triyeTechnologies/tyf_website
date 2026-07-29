@@ -18,14 +18,14 @@ export const pilotSchema = {
   company_website: field.honeypot(),
 };
 
-export function request(req, res) {
+export async function request(req, res) {
   if (req.isSpam) {
     logger.debug(`honeypot tripped on pilot form [${req.id}]`);
     res.status(202).json({ ok: true, data: { received: true } });
     return;
   }
 
-  const record = pilots.create({
+  const record = await pilots.create({
     ...req.valid,
     userAgent: userAgent(req),
     ipHash: hashIp(clientIp(req)),

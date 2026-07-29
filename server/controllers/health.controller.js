@@ -1,25 +1,21 @@
 /** GET /api/v1/health — liveness probe for uptime checks and deploys. */
-import { db } from '../db/index.js';
+import { ping } from '../db/index.js';
 import { env } from '../config/env.js';
 
 const startedAt = Date.now();
 
-export function health(req, res) {
-  let database = 'up';
-  try {
-    db.prepare('SELECT 1 AS ok').get();
-  } catch {
-    database = 'down';
-  }
+export async function health(req, res) {
+  const reachable = await ping();
 
-  const ok = database === 'up';
-  res.status(ok ? 200 : 503).json({
-    ok,
+  res.status(reachable ? 200 : 503).json({
+    ok: reachable,
     data: {
-      status: ok ? 'healthy' : 'degraded',
+      status: reachable ? 'healthy' : 'degraded',
       environment: env.NODE_ENV,
+      runtime: env.IS_SERVERLESS ? 'serverless' : 'server',
+      // Meaningless on serverless, where every instance is minutes old.
       uptimeSeconds: Math.round((Date.now() - startedAt) / 1000),
-      database,
+      database: reachable ? 'up' : 'down',
       time: new Date().toISOString(),
     },
   });

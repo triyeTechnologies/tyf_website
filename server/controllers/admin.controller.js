@@ -45,22 +45,22 @@ export function logout(req, res) {
   res.redirect(302, '/admin/login');
 }
 
-export function dashboard(req, res) {
+export async function dashboard(req, res) {
   const tab = req.query.tab === 'pilots' ? 'pilots' : 'waitlist';
   const search = String(req.query.q ?? '').trim().slice(0, 80);
   const page = Math.max(1, Number.parseInt(String(req.query.page ?? '1'), 10) || 1);
 
   const source = tab === 'pilots' ? pilots : waitlist;
-  const { rows, total } = source.list({
-    search,
-    limit: PAGE_SIZE,
-    offset: (page - 1) * PAGE_SIZE,
-  });
+
+  const [{ rows, total }, summary] = await Promise.all([
+    source.list({ search, limit: PAGE_SIZE, offset: (page - 1) * PAGE_SIZE }),
+    stats.adminStats(),
+  ]);
 
   const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
 
   res.type('html').send(
-    renderAdminPage({ tab, rows, total, page, pages, search, stats: stats.adminStats() }),
+    renderAdminPage({ tab, rows, total, page, pages, search, stats: summary }),
   );
 }
 
@@ -94,7 +94,7 @@ const EXPORTS = {
   },
 };
 
-export function exportCsv(req, res) {
+export async function exportCsv(req, res) {
   const name = String(req.params.dataset ?? '').replace(/\.csv$/i, '');
   const dataset = EXPORTS[name];
   if (!dataset) throw notFound('No such export.');
@@ -104,10 +104,10 @@ export function exportCsv(req, res) {
 
   res.setHeader('Content-Type', 'text/csv; charset=utf-8');
   res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-  res.send(toCsv(dataset.load(), dataset.columns));
+  res.send(toCsv(await dataset.load(), dataset.columns));
 }
 
-export function updatePilotStatus(req, res) {
+export async function updatePilotStatus(req, res) {
   const id = Number.parseInt(req.params.id, 10);
   const status = String(req.body?.status ?? '');
 
@@ -116,7 +116,7 @@ export function updatePilotStatus(req, res) {
     throw badRequest(`Status must be one of: ${pilots.STATUSES.join(', ')}.`);
   }
 
-  const updated = pilots.updateStatus(id, status);
+  const updated = await pilots.updateStatus(id, status);
   if (!updated) throw notFound('That pilot request no longer exists.');
 
   res.redirect(303, '/admin?tab=pilots');

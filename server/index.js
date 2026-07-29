@@ -5,9 +5,34 @@ import process from 'node:process';
 import { createApp } from './app.js';
 import { env } from './config/env.js';
 import { closeDatabase } from './db/index.js';
+import { runMigrations } from './db/migrations.js';
 import { logger, paint } from './utils/logger.js';
 
+/** Host and database name only — never print the password in the banner. */
+function describeDatabase() {
+  if (!env.DATABASE_URL) return 'not configured — set DATABASE_URL';
+  try {
+    const url = new URL(env.DATABASE_URL);
+    return `${url.hostname}${url.pathname}`;
+  } catch {
+    return 'configured';
+  }
+}
+
 const app = createApp();
+
+// Convenience for local work only. In production several instances start at
+// once and would race each other, so migrations are a deploy step there:
+//   npm run db:migrate
+if (env.IS_DEV) {
+  try {
+    await runMigrations();
+  } catch (error) {
+    logger.error('could not migrate the database:', error.message);
+    logger.error('Is DATABASE_URL set in .env?');
+    process.exit(1);
+  }
+}
 
 const server = app.listen(env.PORT, env.HOST, () => {
   const shown = env.HOST === '0.0.0.0' ? 'localhost' : env.HOST;
@@ -21,7 +46,7 @@ const server = app.listen(env.PORT, env.HOST, () => {
   console.log(`  admin   ${paint.violet(`${base}/admin`)}`);
   console.log(`  api     ${paint.dim(`${base}/api/v1/health`)}`);
   console.log(`  env     ${paint.dim(env.NODE_ENV)}`);
-  console.log(`  db      ${paint.dim(env.DATABASE_PATH)}`);
+  console.log(`  db      ${paint.dim(describeDatabase())}`);
   console.log('');
 
   if (env.ADMIN_TOKEN_IS_GENERATED) {

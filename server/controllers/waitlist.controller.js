@@ -13,7 +13,7 @@ export const waitlistSchema = {
   company_website: field.honeypot(),
 };
 
-export function join(req, res) {
+export async function join(req, res) {
   const { email, source } = req.valid;
 
   // Spam gets the same cheerful answer as everyone else, and no database row.
@@ -23,7 +23,7 @@ export function join(req, res) {
     return;
   }
 
-  const { member, created } = waitlist.join({
+  const { member, created } = await waitlist.join({
     email,
     source,
     referrer: referrer(req),
@@ -33,13 +33,15 @@ export function join(req, res) {
 
   if (created) logger.info(`waitlist +1 — ${email} (${source})`);
 
+  const { members } = await stats.publicStats();
+
   res.status(created ? 201 : 200).json({
     ok: true,
     data: {
       email: member.email,
       created,
       // Lets the page animate the live counter straight after a signup.
-      members: stats.publicStats().members,
+      members,
     },
     message: created
       ? "You're in. We'll write when access opens."

@@ -5,17 +5,21 @@
   "description": "Try your Fit — marketing site, waitlist + pilot API, and admin console.",
   "type": "module",
   "engines": {
-    "node": ">=22.5.0"
+    "node": ">=20.9.0"
   },
   "scripts": {
-    "start": "node --no-warnings=ExperimentalWarning server/index.js",
-    "dev": "node --watch --no-warnings=ExperimentalWarning server/index.js",
-    "db:reset": "node --no-warnings=ExperimentalWarning scripts/reset-db.js",
-    "db:seed": "node --no-warnings=ExperimentalWarning scripts/seed-db.js",
-    "export": "node --no-warnings=ExperimentalWarning scripts/export-csv.js",
-    "token": "node --no-warnings=ExperimentalWarning scripts/make-token.js"
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "db:migrate": "node scripts/migrate.js",
+    "db:reset": "node scripts/reset-db.js",
+    "db:seed": "node scripts/seed-db.js",
+    "export": "node scripts/export-csv.js",
+    "token": "node scripts/make-token.js"
   },
   "dependencies": {
-    "express": "^5.1.0"
+    "@upstash/ratelimit": "^2.0.8",
+    "@upstash/redis": "^1.38.0",
+    "express": "^5.1.0",
+    "pg": "^8.22.0"
   }
 }

@@ -50,7 +50,9 @@ const list = (key, fallback = []) => {
 const NODE_ENV = str('NODE_ENV', 'development');
 const IS_PROD = NODE_ENV === 'production';
 
-const databasePath = str('DATABASE_PATH', 'data/tyf.db');
+// Vercel sets this on every deployment. It tells us we are short-lived and
+// horizontally scaled: keep connection pools tiny, never migrate on boot.
+const IS_SERVERLESS = str('VERCEL') !== '' || str('AWS_LAMBDA_FUNCTION_NAME') !== '';
 
 // An unset admin token in development gets a fresh random one each boot; in
 // production we refuse to guess, and index.js turns this into a hard warning.
@@ -64,18 +66,31 @@ export const env = Object.freeze({
   NODE_ENV,
   IS_PROD,
   IS_DEV: !IS_PROD,
+  IS_SERVERLESS,
 
   /* server */
   HOST: str('HOST', '0.0.0.0'),
   PORT: int('PORT', 3000),
-  TRUST_PROXY: str('TRUST_PROXY', IS_PROD ? '1' : 'loopback'),
+  // Vercel always sits behind its own proxy, so trust one hop there.
+  TRUST_PROXY: str('TRUST_PROXY', IS_SERVERLESS || IS_PROD ? '1' : 'loopback'),
 
   /* paths */
   ROOT_DIR,
   PUBLIC_DIR: path.join(ROOT_DIR, 'public'),
-  DATABASE_PATH: path.isAbsolute(databasePath)
-    ? databasePath
-    : path.join(ROOT_DIR, databasePath),
+
+  /* database — Supabase Postgres.
+     Use the *transaction pooler* connection string (port 6543), not the
+     direct one: serverless instances open and drop connections constantly,
+     and the direct port runs out of them fast. */
+  DATABASE_URL: str('DATABASE_URL') || str('POSTGRES_URL'),
+  DATABASE_POOL_MAX: int('DATABASE_POOL_MAX', IS_SERVERLESS ? 1 : 10),
+  DATABASE_SSL: bool('DATABASE_SSL', true),
+
+  /* distributed rate limiting — optional.
+     Without these the limiter falls back to per-instance memory, which is
+     fine locally and weak on serverless. */
+  UPSTASH_REDIS_REST_URL: str('UPSTASH_REDIS_REST_URL') || str('KV_REST_API_URL'),
+  UPSTASH_REDIS_REST_TOKEN: str('UPSTASH_REDIS_REST_TOKEN') || str('KV_REST_API_TOKEN'),
 
   /* security */
   ADMIN_TOKEN,

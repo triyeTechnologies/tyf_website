@@ -21,7 +21,7 @@ const stamp = new Date().toISOString().slice(0, 10);
 const datasets = [
   {
     file: `tyf-waitlist-${stamp}.csv`,
-    rows: waitlist.listAllForExport(),
+    rows: await waitlist.listAllForExport(),
     columns: [
       { key: 'id', header: 'ID' },
       { key: 'email', header: 'Email' },
@@ -32,7 +32,7 @@ const datasets = [
   },
   {
     file: `tyf-pilots-${stamp}.csv`,
-    rows: pilots.listAllForExport(),
+    rows: await pilots.listAllForExport(),
     columns: [
       { key: 'id', header: 'ID' },
       { key: 'company', header: 'Company' },
@@ -56,4 +56,4 @@ for (const dataset of datasets) {
   console.log(`${String(dataset.rows.length).padStart(5)} rows -> ${target}`);
 }
 
-closeDatabase();
+await closeDatabase();

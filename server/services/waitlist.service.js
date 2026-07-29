@@ -1,74 +1,91 @@
 /** Everything the app knows how to do with a waitlist member. */
-import { db, plain, plainAll } from '../db/index.js';
-
-const INSERT = db.prepare(`
-  INSERT INTO waitlist_members (email, source, referrer, user_agent, ip_hash)
-  VALUES (?, ?, ?, ?, ?)
-`);
-
-const FIND_BY_EMAIL = db.prepare('SELECT * FROM waitlist_members WHERE email = ? COLLATE NOCASE');
-const COUNT = db.prepare('SELECT COUNT(*) AS total FROM waitlist_members');
-const COUNT_SINCE = db.prepare('SELECT COUNT(*) AS total FROM waitlist_members WHERE created_at >= ?');
-const COUNT_SEARCH = db.prepare(`
-  SELECT COUNT(*) AS total FROM waitlist_members
-  WHERE (? = '' OR email LIKE ? COLLATE NOCASE OR source LIKE ? COLLATE NOCASE)
-`);
-const PAGE = db.prepare(`
-  SELECT id, email, source, referrer, created_at
-  FROM waitlist_members
-  WHERE (? = '' OR email LIKE ? COLLATE NOCASE OR source LIKE ? COLLATE NOCASE)
-  ORDER BY created_at DESC, id DESC
-  LIMIT ? OFFSET ?
-`);
-const ALL_FOR_EXPORT = db.prepare(`
-  SELECT id, email, source, referrer, created_at
-  FROM waitlist_members
-  ORDER BY created_at DESC, id DESC
-`);
-const DAILY = db.prepare(`
-  SELECT substr(created_at, 1, 10) AS day, COUNT(*) AS total
-  FROM waitlist_members
-  WHERE created_at >= ?
-  GROUP BY day
-  ORDER BY day ASC
-`);
+import { one, many } from '../db/index.js';
 
 /**
- * Adds a member. Signing up twice is a no-op that still reports success —
- * telling a stranger "that address is already on the list" leaks membership.
+ * Adds a member. Signing up twice succeeds and reports `created: false` —
+ * answering "that address is already registered" would tell any stranger who
+ * is on the list.
  *
- * @returns {{ member: object, created: boolean }}
+ * `ON CONFLICT DO NOTHING` makes this one atomic statement, so two concurrent
+ * signups with the same address cannot race each other.
+ *
+ * @returns {Promise<{ member: object, created: boolean }>}
  */
-export function join({ email, source = 'site', referrer = null, userAgent = null, ipHash = null }) {
-  const existing = plain(FIND_BY_EMAIL.get(email));
-  if (existing) return { member: existing, created: false };
+export async function join({
+  email,
+  source = 'site',
+  referrer = null,
+  userAgent = null,
+  ipHash = null,
+}) {
+  const inserted = await one(
+    `INSERT INTO waitlist_members (email, source, referrer, user_agent, ip_hash)
+     VALUES ($1, $2, $3, $4, $5)
+     ON CONFLICT (email) DO NOTHING
+     RETURNING *`,
+    [email, source, referrer, userAgent, ipHash],
+  );
 
-  try {
-    INSERT.run(email, source, referrer, userAgent, ipHash);
-  } catch (error) {
-    // A race between the check and the insert still lands on the UNIQUE index.
-    if (!/UNIQUE/i.test(error.message)) throw error;
-    return { member: plain(FIND_BY_EMAIL.get(email)), created: false };
-  }
+  if (inserted) return { member: inserted, created: true };
 
-  return { member: plain(FIND_BY_EMAIL.get(email)), created: true };
+  // Conflict: the address was already there.
+  const existing = await one('SELECT * FROM waitlist_members WHERE email = $1', [email]);
+  return { member: existing, created: false };
 }
 
-export const countMembers = () => COUNT.get().total;
+export async function countMembers() {
+  const row = await one('SELECT COUNT(*)::int AS total FROM waitlist_members');
+  return row.total;
+}
 
-export const countSince = (isoDate) => COUNT_SINCE.get(isoDate).total;
+/** How many joined within the last `days` days. */
+export async function countSince(days) {
+  const row = await one(
+    `SELECT COUNT(*)::int AS total
+     FROM waitlist_members
+     WHERE created_at >= now() - make_interval(days => $1)`,
+    [days],
+  );
+  return row.total;
+}
 
 /** Paged list for the admin console. */
-export function list({ search = '', limit = 50, offset = 0 } = {}) {
+export async function list({ search = '', limit = 50, offset = 0 } = {}) {
   const like = `%${search}%`;
-  return {
-    rows: plainAll(PAGE.all(search, like, like, limit, offset)),
-    total: COUNT_SEARCH.get(search, like, like).total,
-  };
+
+  const rows = await many(
+    `SELECT id, email, source, referrer, created_at
+     FROM waitlist_members
+     WHERE $1 = '' OR email ILIKE $2 OR source ILIKE $2
+     ORDER BY created_at DESC, id DESC
+     LIMIT $3 OFFSET $4`,
+    [search, like, limit, offset],
+  );
+
+  const total = await one(
+    `SELECT COUNT(*)::int AS total
+     FROM waitlist_members
+     WHERE $1 = '' OR email ILIKE $2 OR source ILIKE $2`,
+    [search, like],
+  );
+
+  return { rows, total: total.total };
 }
 
-export const listAllForExport = () => plainAll(ALL_FOR_EXPORT.all());
+export const listAllForExport = () =>
+  many(`SELECT id, email, source, referrer, created_at
+        FROM waitlist_members
+        ORDER BY created_at DESC, id DESC`);
 
-export const dailySignups = (sinceIso) => plainAll(DAILY.all(sinceIso));
+/** Signups per day for the admin sparkline. */
+export const dailySignups = (days) =>
+  many(
+    `SELECT to_char(created_at, 'YYYY-MM-DD') AS day, COUNT(*)::int AS total
+     FROM waitlist_members
+     WHERE created_at >= now() - make_interval(days => $1)
+     GROUP BY day
+     ORDER BY day ASC`,
+    [days],
+  );
 
 export default { join, countMembers, countSince, list, listAllForExport, dailySignups };

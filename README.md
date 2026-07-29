@@ -14,7 +14,9 @@ generated: what you edit is what ships.
 
 ```bash
 npm install
-npm start           # http://localhost:3000
+cp .env.example .env      # then fill in DATABASE_URL and ADMIN_TOKEN
+npm run db:migrate        # creates the tables
+npm start                 # http://localhost:3000
 ```
 
 Or with reload on save:
@@ -23,29 +25,29 @@ Or with reload on save:
 npm run dev
 ```
 
-First boot creates `data/tyf.db` and applies the schema. If `ADMIN_TOKEN` is not
-set, the server prints a temporary one — copy it into `.env` to keep it across
-restarts.
+`DATABASE_URL` is the Supabase **transaction pooler** connection string (port
+6543 — see `.env.example` for why). `npm run token` prints a fresh
+`ADMIN_TOKEN=` line to paste in; without one the server generates a throwaway
+token on every restart, which is exactly as annoying as it sounds.
 
-```bash
-cp .env.example .env
-npm run token       # prints a fresh ADMIN_TOKEN= line to paste in
-```
-
-Requires **Node 22.5+** (for the built-in `node:sqlite`). Only one runtime
-dependency: Express.
+Requires **Node 20.9+**. Runtime dependencies: Express, `pg`, and the two
+Upstash clients.
 
 ---
 
 ## Layout
 
 ```
+api/
+  index.js              Vercel entry point — exports the same Express app
+
 public/
   index.html            the entire website — one file
   images/               drop assets here; README.txt lists every slot
+  videos/               the demo film
 
 server/
-  index.js              boot, banner, graceful shutdown
+  index.js              local boot, banner, graceful shutdown
   app.js                middleware order — the shape of a request
   config/env.js         every tunable, read from the environment once
   routes/               URL → controller
@@ -53,12 +55,13 @@ server/
   services/             business logic and all SQL
   middleware/           context, security, cors, cookies, rate limit,
                         validation, admin auth, 404, errors
-  db/                   connection + ordered migrations
+  db/                   connection pool + ordered migrations
   views/                server-rendered admin and error pages
   utils/                logger, errors, schema, csv, crypto
 
-scripts/                db:reset, db:seed, export, token
+scripts/                db:migrate, db:reset, db:seed, export, token
 archive/                the previous single-file version, kept for reference
+vercel.json             static/function split and cache headers
 ```
 
 The layering rule: **controllers never write SQL, services never touch `req` or
@@ -174,20 +177,58 @@ automatically; a missing one keeps its label.
 
 ---
 
-## Deploying
+## Deploying to Vercel
 
-Any host that runs Node. Behind a reverse proxy:
+`public/` is served from the CDN; `/api/v1/*` and `/admin*` are rewritten to a
+single function that is the same Express app (`api/index.js`). There is no
+second copy of the routing to keep in sync.
+
+**1 — provision the two services** (both set their own environment variables):
 
 ```bash
-NODE_ENV=production ADMIN_TOKEN=<long-random> TRUST_PROXY=1 npm start
+vercel integration add supabase     # Postgres
+vercel integration add upstash      # Redis, for shared rate limits
 ```
 
-`TRUST_PROXY` matters — without it every request appears to come from the proxy
-and rate limiting applies to all visitors as one.
+**2 — set the rest of the environment** in the Vercel dashboard, or:
 
-The database is a single file. Back it up by copying `data/tyf.db` (with its
-`-wal` sibling), or run `npm run export` on a schedule.
+```bash
+vercel env add ADMIN_TOKEN production     # from `npm run token`
+vercel env add DATABASE_URL production    # Supabase *transaction pooler*, port 6543
+```
 
-If you would rather not rely on Node's still-experimental `node:sqlite`,
-`server/db/index.js` is the only file that touches it — swapping in
-`better-sqlite3` is a change to that one module.
+Supabase's integration may only expose the direct connection string. Take the
+pooler one from the Supabase dashboard instead — the direct port exhausts its
+connection slots under serverless traffic.
+
+**3 — create the tables**, once, from your machine:
+
+```bash
+vercel env pull .env        # brings the production values down
+npm run db:migrate
+```
+
+Migrations deliberately do not run on boot: Vercel starts many instances at
+once and they would race each other. Re-run this whenever a migration is added.
+
+**4 — deploy:**
+
+```bash
+vercel --prod
+```
+
+### Anywhere else
+
+The app is a normal Express server, so any Node host works:
+
+```bash
+NODE_ENV=production TRUST_PROXY=1 npm start
+```
+
+`TRUST_PROXY` matters behind a reverse proxy — without it every request appears
+to come from the proxy, and one visitor's rate limit is everyone's.
+
+### Backups
+
+Supabase takes its own, and `npm run export` writes both tables to CSV if you
+want a copy you control.

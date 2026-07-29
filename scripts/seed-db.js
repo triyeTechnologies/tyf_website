@@ -22,7 +22,7 @@ const SOURCES = ['site', 'hero', 'pricing', 'instagram', 'demo'];
 let added = 0;
 for (let index = 0; index < 60; index += 1) {
   const email = `${FIRST[index % FIRST.length]}.${LAST[(index * 3) % LAST.length]}${index}@example.com`;
-  const { created } = waitlist.join({
+  const { created } = await waitlist.join({
     email,
     source: SOURCES[index % SOURCES.length],
     referrer: 'https://seed.local/',
@@ -37,7 +37,7 @@ const COMPANIES = [
 ];
 
 for (const [company, segment, catalogueSize, monthlyVolume] of COMPANIES) {
-  pilots.create({
+  await pilots.create({
     name: 'Priya Menon',
     company,
     email: `pilots@${company.toLowerCase().replace(/[^a-z]+/g, '')}.example.com`,
@@ -51,4 +51,4 @@ for (const [company, segment, catalogueSize, monthlyVolume] of COMPANIES) {
 }
 
 console.log(`Seeded ${added} waitlist members and ${COMPANIES.length} pilot requests.`);
-closeDatabase();
+await closeDatabase();

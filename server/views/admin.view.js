@@ -78,10 +78,16 @@ function sparkline(daily) {
   </svg>`;
 }
 
-const dateCell = (iso) => {
-  const date = new Date(`${iso}`.replace(' ', 'T'));
-  if (Number.isNaN(date.getTime())) return iso;
-  return date.toLocaleString('en-IN', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+/** Accepts the driver's Date, or a string if the shape ever changes. */
+const dateCell = (value) => {
+  const date = value instanceof Date ? value : new Date(String(value).replace(' ', 'T'));
+  if (Number.isNaN(date.getTime())) return String(value);
+  return date.toLocaleString('en-IN', {
+    day: '2-digit',
+    month: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
 };
 
 function waitlistTable(rows) {
