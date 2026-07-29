@@ -1,0 +1,23 @@
+node_modules/
+
+# secrets
+.env
+.env.local
+.env.*.local
+
+# the database and its write-ahead log — real signups live here
+data/
+*.db
+*.db-wal
+*.db-shm
+
+# generated
+exports/
+*.log
+npm-debug.log*
+
+# editors / os
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

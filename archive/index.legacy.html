@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Try your Fit — wear it before you buy it</title>
+<meta name="description" content="Two photos. One of you, one of the fit. TyF puts it on your body in seconds. Virtual try-on built in India.">
+<meta name="theme-color" content="#5B2BFF">
+<meta property="og:title" content="Try your Fit — wear it before you buy it">
+<meta property="og:description" content="Two photos in. You, wearing it, out.">
+<meta property="og:image" content="images/og.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════════════
+   TRY YOUR FIT — vibrant build
+   Every <figure class="slot"> is a drop-in image slot.
+   Put a file at the src path and it takes over automatically.
+   ══════════════════════════════════════════════════════ */
+:root{
+  --ink:#12100E;
+  --paper:#FDFCF7;
+  --violet:#5B2BFF;
+  --lime:#C8FF33;
+  --pink:#FF2E93;
+  --tang:#FF6A1F;
+  --sky:#2BD9FF;
+  --grey:#6F6A63;
+  --disp:'Bricolage Grotesque','Space Grotesk',system-ui,sans-serif;
+  --body:'Inter',system-ui,sans-serif;
+  --max:1280px;
+  --pad:clamp(18px,4.6vw,60px);
+  --e:cubic-bezier(.2,1,.3,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+::selection{background:var(--lime);color:var(--ink)}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--pad)}
+section{position:relative}
+
+h1,h2,h3,h4,.disp{font-family:var(--disp);font-weight:800;letter-spacing:-.045em;line-height:.94}
+h1{font-size:clamp(46px,9.2vw,124px)}
+h2{font-size:clamp(36px,6.6vw,86px)}
+h3{font-size:clamp(20px,2.4vw,29px);letter-spacing:-.03em;line-height:1.06}
+p{font-size:clamp(15px,1.35vw,18px)}
+.lead{font-size:clamp(16px,1.6vw,21px);line-height:1.5;max-width:58ch}
+.kicker{font-family:var(--disp);font-weight:600;font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+  display:inline-block;padding:7px 14px;border-radius:100px;background:var(--ink);color:var(--paper)}
+.sec{padding:clamp(74px,11vw,140px) 0}
+
+/* ── colour blocks ── */
+.b-ink{background:var(--ink);color:var(--paper)}
+.b-violet{background:var(--violet);color:#fff}
+.b-lime{background:var(--lime);color:var(--ink)}
+.b-pink{background:var(--pink);color:var(--ink)}
+.b-ink .kicker,.b-violet .kicker{background:var(--lime);color:var(--ink)}
+.b-lime .kicker,.b-pink .kicker{background:var(--ink);color:var(--paper)}
+
+/* ── buttons ── */
+.btn{display:inline-flex;align-items:center;gap:9px;padding:16px 28px;border-radius:100px;
+  font-family:var(--disp);font-weight:600;font-size:16px;letter-spacing:-.02em;
+  transition:transform .35s var(--e),background .25s,color .25s,box-shadow .35s var(--e);border:2px solid transparent}
+.btn:hover{transform:translateY(-3px)}
+.b1{background:var(--ink);color:var(--paper);box-shadow:0 0 0 0 var(--lime)}
+.b1:hover{box-shadow:6px 6px 0 0 var(--lime)}
+.b2{border-color:currentColor}
+.b2:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.b-ink .b1,.b-violet .b1{background:var(--lime);color:var(--ink)}
+.b-ink .b1:hover,.b-violet .b1:hover{box-shadow:6px 6px 0 0 var(--pink)}
+.b-lime .b1:hover,.b-pink .b1:hover{box-shadow:6px 6px 0 0 #fff}
+.btn .a{transition:transform .35s var(--e)}
+.btn:hover .a{transform:translateX(5px)}
+
+/* ── image slots ───────────────────────────────────────
+   The <figure> paints a vivid placeholder + spec label.
+   A real <img> sits on top and hides it. If the file is
+   missing the img removes itself and the spec shows.     */
+.slot{position:relative;overflow:hidden;border-radius:18px;background:
+  linear-gradient(135deg,var(--violet),var(--pink) 55%,var(--tang));isolation:isolate}
+.slot::after{content:attr(data-spec);position:absolute;inset:auto 14px 14px;z-index:1;
+  font-family:var(--disp);font-weight:600;font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  color:#fff;background:rgba(18,16,14,.62);backdrop-filter:blur(6px);padding:9px 12px;border-radius:10px;line-height:1.35}
+.slot::before{content:"";position:absolute;inset:0;z-index:1;
+  background:repeating-linear-gradient(45deg,rgba(255,255,255,.11) 0 12px,transparent 12px 24px)}
+.slot img{position:absolute;inset:0;z-index:2;width:100%;height:100%;object-fit:cover}
+.slot.v2{background:linear-gradient(135deg,var(--sky),var(--violet) 60%,var(--pink))}
+.slot.v3{background:linear-gradient(135deg,var(--lime),var(--sky) 55%,var(--violet))}
+.slot.v4{background:linear-gradient(135deg,var(--tang),var(--pink) 60%,var(--violet))}
+
+/* ── nav ── */
+header{position:fixed;top:0;left:0;right:0;z-index:200;transition:.35s var(--e)}
+header.stuck{background:rgba(253,252,247,.86);backdrop-filter:blur(16px);box-shadow:0 1px 0 rgba(18,16,14,.1)}
+nav{display:flex;align-items:center;gap:24px;height:76px}
+.logo{font-family:var(--disp);font-weight:800;font-size:23px;letter-spacing:-.06em;display:flex;align-items:center;gap:7px}
+.logo i{width:11px;height:11px;border-radius:50%;background:var(--violet);animation:blink 2.4s infinite var(--e)}
+@keyframes blink{0%,100%{transform:scale(1)}50%{transform:scale(.55);background:var(--pink)}}
+.nlinks{display:flex;gap:24px;margin-left:auto;font-family:var(--disp);font-weight:600;font-size:15px;letter-spacing:-.02em}
+.nlinks a{position:relative;padding:3px 0}
+.nlinks a::after{content:"";position:absolute;left:0;bottom:0;width:0;height:2px;background:var(--violet);transition:width .35s var(--e)}
+.nlinks a:hover::after{width:100%}
+.nav-b .btn{padding:11px 20px;font-size:15px}
+.burger{display:none;margin-left:auto;width:40px;height:40px;border-radius:50%;background:var(--ink);
+  align-items:center;justify-content:center}
+.burger span,.burger span::before,.burger span::after{display:block;width:16px;height:2px;background:var(--paper)}
+.burger span{position:relative}
+.burger span::before,.burger span::after{content:"";position:absolute;left:0}
+.burger span::before{top:-5px}.burger span::after{top:5px}
+.mob{position:fixed;inset:76px 0 auto;background:var(--paper);z-index:199;display:none;padding:16px var(--pad) 30px;
+  box-shadow:0 20px 40px -20px rgba(18,16,14,.3)}
+.mob.open{display:block}
+.mob a{display:block;font-family:var(--disp);font-weight:800;font-size:30px;letter-spacing:-.045em;padding:11px 0}
+.prog{position:fixed;top:0;left:0;height:3px;background:var(--violet);z-index:300;width:0}
+
+/* ── hero ── */
+.hero{padding:132px 0 0;overflow:hidden}
+.blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:.5;pointer-events:none;z-index:0}
+.blob1{width:520px;height:520px;background:var(--violet);top:-140px;left:-120px}
+.blob2{width:430px;height:430px;background:var(--pink);top:180px;right:-110px}
+.blob3{width:340px;height:340px;background:var(--lime);bottom:-40px;left:38%}
+.hero .wrap{position:relative;z-index:1}
+h1 .word{display:inline-block}
+h1 .hl{background:var(--lime);padding:0 .1em;border-radius:10px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+h1 .ol{-webkit-text-stroke:2px var(--ink);color:transparent}
+.hero-sub{display:flex;gap:34px;align-items:flex-end;margin-top:30px;flex-wrap:wrap}
+.hero-cta{display:flex;gap:12px;margin-top:32px;flex-wrap:wrap}
+.badge{width:118px;height:118px;position:relative;flex:none}
+.badge svg{width:100%;height:100%;animation:spin 14s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.badge .mid{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--disp);font-weight:800;font-size:26px}
+
+/* ── try-on wipe ── */
+.wipe-wrap{margin-top:56px;display:grid;grid-template-columns:1.35fr .65fr;gap:20px;align-items:stretch}
+.wipe{position:relative;border-radius:22px;overflow:hidden;aspect-ratio:16/11;
+  border:3px solid var(--ink);background:var(--ink);touch-action:none;cursor:ew-resize}
+.wipe .slot{position:absolute;inset:0;border-radius:0}
+.wipe .after{clip-path:inset(0 0 0 50%);z-index:3;will-change:clip-path}
+.wipe .after .slot{z-index:0}
+.bar{position:absolute;top:0;bottom:0;left:50%;width:4px;background:var(--lime);z-index:6}
+.grip{position:absolute;top:50%;left:50%;translate:-50% -50%;width:56px;height:56px;border-radius:50%;
+  background:var(--lime);border:3px solid var(--ink);display:grid;place-items:center;z-index:7;cursor:ew-resize}
+.pill{position:absolute;top:16px;z-index:6;font-family:var(--disp);font-weight:600;font-size:11.5px;
+  letter-spacing:.16em;padding:8px 13px;border-radius:100px;border:2px solid var(--ink)}
+.pill-a{left:16px;background:#fff;color:var(--ink)}
+.pill-b{right:16px;background:var(--lime);color:var(--ink)}
+.rail{display:flex;flex-direction:column;gap:12px}
+.rail .card{flex:1;border-radius:18px;border:3px solid var(--ink);padding:20px;display:flex;flex-direction:column;
+  justify-content:space-between;min-height:104px}
+.rail .card b{font-family:var(--disp);font-weight:800;font-size:clamp(26px,3.4vw,42px);letter-spacing:-.05em;line-height:1}
+.rail .card span{font-family:var(--disp);font-weight:600;font-size:11.5px;letter-spacing:.15em;text-transform:uppercase}
+
+/* ── ticker ── */
+.tick{padding:18px 0;overflow:hidden;border-top:3px solid var(--ink);border-bottom:3px solid var(--ink)}
+.tk{display:flex;gap:36px;width:max-content;animation:run 26s linear infinite}
+.tk.rev{animation-direction:reverse}
+@keyframes run{to{transform:translateX(-50%)}}
+.tk b{font-family:var(--disp);font-weight:800;font-size:clamp(22px,3.2vw,40px);letter-spacing:-.04em;
+  display:flex;align-items:center;gap:36px;white-space:nowrap;text-transform:uppercase}
+.tk b::after{content:"";width:13px;height:13px;border-radius:50%;background:var(--violet)}
+
+/* ── grids ── */
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,60px);align-items:center}
+.head{max-width:900px;margin-bottom:52px}
+.head h2{margin-top:20px}
+.head .lead{margin-top:20px}
+
+.tile{border-radius:20px;padding:26px 24px 28px;border:3px solid var(--ink);
+  transition:transform .45s var(--e),box-shadow .45s var(--e)}
+.tile:hover{transform:translate(-3px,-3px);box-shadow:8px 8px 0 var(--ink)}
+.b-ink .tile{border-color:var(--paper)}
+.b-ink .tile:hover{box-shadow:8px 8px 0 var(--lime)}
+.tile .n{font-family:var(--disp);font-weight:800;font-size:44px;letter-spacing:-.05em;line-height:1;
+  color:var(--lime);-webkit-text-stroke:0}
+.b-lime .tile .n,.b-pink .tile .n{color:var(--violet)}
+.tile h3{margin:14px 0 10px}
+.tile p{font-size:15.4px;opacity:.82}
+
+.statrow{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:56px}
+.statrow b{font-family:var(--disp);font-weight:800;font-size:clamp(40px,6.4vw,80px);letter-spacing:-.055em;
+  line-height:.9;display:block;color:var(--lime)}
+.statrow p{margin-top:14px;font-size:15.4px;opacity:.82;max-width:32ch}
+
+/* ── steps ── */
+.stepgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.step .slot{aspect-ratio:4/5;margin-bottom:18px}
+.step .k{font-family:var(--disp);font-weight:800;font-size:13px;letter-spacing:.2em;color:var(--violet)}
+.step h3{margin:10px 0 8px}
+.step p{font-size:15.4px;color:var(--grey)}
+
+/* ── gallery ── */
+.gal{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.gal .slot{aspect-ratio:4/5;transition:transform .5s var(--e)}
+.gal .slot:hover{transform:scale(1.02) rotate(-.6deg)}
+.stamp{position:absolute;z-index:5;top:12px;left:12px;font-family:var(--disp);font-weight:800;font-size:10.5px;
+  letter-spacing:.14em;background:var(--lime);color:var(--ink);padding:6px 10px;border-radius:8px;border:2px solid var(--ink)}
+
+/* ── video ── */
+.vid{border:3px solid var(--ink);border-radius:22px;overflow:hidden;background:#000}
+.v16{position:relative;padding-top:56.25%}
+.v16 iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+
+/* ── tabs ── */
+.tabs{display:inline-flex;gap:6px;padding:6px;border-radius:100px;border:3px solid var(--ink);background:var(--paper)}
+.tab{padding:11px 24px;border-radius:100px;font-family:var(--disp);font-weight:600;font-size:15.5px;letter-spacing:-.02em}
+.tab.on{background:var(--violet);color:#fff}
+.pane{display:none}.pane.on{display:block;animation:pop .45s var(--e)}
+@keyframes pop{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.fl{list-style:none;margin-top:22px}
+.fl li{display:flex;gap:13px;padding:14px 0;border-top:2px solid rgba(18,16,14,.12);font-size:15.6px}
+.fl li:first-child{border-top:none}
+.fl b{font-family:var(--disp);font-weight:600}
+.dot{flex:none;width:22px;height:22px;border-radius:50%;background:var(--violet);margin-top:2px;
+  display:grid;place-items:center}
+.dot::after{content:"";width:7px;height:4px;border-left:2px solid #fff;border-bottom:2px solid #fff;
+  transform:rotate(-45deg) translate(1px,-1px)}
+
+/* ── closet ── */
+.closet{display:grid;grid-template-columns:repeat(auto-fit,minmax(108px,1fr));gap:12px;margin-top:14px}
+.gm{border:3px solid var(--ink);border-radius:16px;background:#fff;padding:12px;cursor:pointer;
+  transition:transform .35s var(--e),box-shadow .35s var(--e)}
+.gm:hover{transform:translateY(-4px)}
+.gm.on{background:var(--lime);box-shadow:5px 5px 0 var(--ink)}
+.gm svg{width:100%;height:60px}
+.gm em{display:block;text-align:center;font-style:normal;font-family:var(--disp);font-weight:600;
+  font-size:10.5px;letter-spacing:.09em;margin-top:8px}
+.combo{margin-top:26px;border:3px solid var(--ink);border-radius:20px;background:#fff;padding:26px;
+  display:flex;align-items:center;gap:26px;flex-wrap:wrap}
+.combo .num{font-family:var(--disp);font-weight:800;font-size:clamp(48px,8vw,86px);letter-spacing:-.06em;line-height:.9;color:var(--violet)}
+.combo p{max-width:38ch;font-size:15.6px}
+.combo .rs{margin-left:auto;font-family:var(--disp);font-weight:600;text-decoration:underline}
+
+/* ── pricing ── */
+.prices{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:44px;align-items:stretch}
+.pc{border:3px solid var(--ink);border-radius:22px;padding:30px 26px 32px;background:var(--paper);
+  display:flex;flex-direction:column}
+.pc.star{background:var(--ink);color:var(--paper);transform:translateY(-10px)}
+.pc .tag{font-family:var(--disp);font-weight:800;font-size:11px;letter-spacing:.16em;padding:6px 12px;
+  border-radius:100px;background:var(--violet);color:#fff;align-self:flex-start;margin-bottom:18px}
+.pc.star .tag{background:var(--lime);color:var(--ink)}
+.pc .amt{font-family:var(--disp);font-weight:800;font-size:clamp(40px,5.4vw,58px);letter-spacing:-.06em;margin:16px 0 4px;line-height:1}
+.pc .per{font-size:14px;opacity:.7}
+.pc ul{list-style:none;margin:22px 0 26px}
+.pc li{font-size:15.2px;padding:9px 0 9px 20px;position:relative;opacity:.85}
+.pc li::before{content:"";position:absolute;left:0;top:16px;width:8px;height:8px;border-radius:50%;background:var(--violet)}
+.pc.star li::before{background:var(--lime)}
+.pc .btn{margin-top:auto;justify-content:center}
+.pc.star .b2{border-color:var(--paper)}
+.pc.star .b2:hover{background:var(--paper);color:var(--ink)}
+
+/* ── team ── */
+.team{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.mem .slot{aspect-ratio:1/1;margin-bottom:16px}
+.mem h3{margin-bottom:6px}
+.mem .role{font-family:var(--disp);font-weight:600;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--violet)}
+.mem p{margin-top:12px;font-size:15.2px;color:var(--grey)}
+
+/* ── faq ── */
+.faq{margin-top:40px}
+.q{border-top:2px solid rgba(18,16,14,.14)}
+.q:last-child{border-bottom:2px solid rgba(18,16,14,.14)}
+.q button{width:100%;display:flex;gap:18px;align-items:flex-start;padding:24px 0;text-align:left;
+  font-family:var(--disp);font-weight:600;font-size:clamp(17px,2vw,23px);letter-spacing:-.03em}
+.q .pm{margin-left:auto;flex:none;width:30px;height:30px;border-radius:50%;background:var(--violet);position:relative}
+.q .pm::before,.q .pm::after{content:"";position:absolute;background:#fff;left:50%;top:50%;translate:-50% -50%}
+.q .pm::before{width:13px;height:2.4px}
+.q .pm::after{width:2.4px;height:13px;transition:.4s var(--e)}
+.q.open .pm::after{height:2.4px}
+.q .a{max-height:0;overflow:hidden;transition:max-height .5s var(--e)}
+.q .a p{padding-bottom:26px;color:var(--grey);max-width:72ch}
+
+/* ── cta ── */
+.cta{border-radius:30px;padding:clamp(40px,7vw,86px) clamp(24px,5vw,60px);text-align:center;
+  background:linear-gradient(135deg,#5B2BFF,#7B24C9 50%,#C41E6B);color:#fff;position:relative;overflow:hidden}
+.cta h2{margin:20px auto 0;max-width:14ch}
+.form{display:flex;gap:10px;max-width:540px;margin:32px auto 0;flex-wrap:wrap;justify-content:center}
+.form input{flex:1;min-width:230px;border:3px solid var(--ink);border-radius:100px;padding:15px 22px;
+  font-family:var(--body);font-size:16px;outline:none;background:#fff;color:var(--ink)}
+.form input:focus{box-shadow:5px 5px 0 var(--lime)}
+.ok{margin-top:18px;font-family:var(--disp);font-weight:600;display:none}
+.ok.show{display:block}
+
+/* ── footer ── */
+footer{background:var(--ink);color:var(--paper);padding:74px 0 40px}
+.fg{display:grid;grid-template-columns:1.7fr 1fr 1fr 1fr;gap:34px}
+.fg h4{font-family:var(--disp);font-weight:600;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;
+  opacity:.55;margin-bottom:16px}
+.fg a,.fg p{display:block;font-size:14.6px;padding:6px 0;opacity:.8;transition:.25s}
+.fg a:hover{opacity:1;color:var(--lime)}
+.legal{margin-top:46px;padding-top:24px;border-top:1px solid rgba(253,252,247,.16);display:flex;
+  justify-content:space-between;gap:18px;flex-wrap:wrap;font-size:12.6px;opacity:.55}
+
+/* ── reveal ── */
+.rv{opacity:0;transform:translateY(26px);transition:opacity .8s var(--e),transform .8s var(--e)}
+.rv.in{opacity:1;transform:none}
+
+@media(max-width:1020px){
+  .nlinks,.nav-b{display:none}.burger{display:flex}
+  .wipe-wrap{grid-template-columns:1fr}
+  .rail{flex-direction:row;flex-wrap:wrap}
+  .rail .card{flex:1 1 40%}
+  .g4{grid-template-columns:repeat(2,1fr)}
+  .g2,.stepgrid,.gal,.prices,.team,.statrow{grid-template-columns:1fr}
+  .gal{grid-template-columns:repeat(2,1fr)}
+  .pc.star{transform:none}
+  .fg{grid-template-columns:1fr 1fr}
+}
+@media(max-width:600px){
+  .g4,.gal{grid-template-columns:1fr}
+  .hero{padding-top:110px}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div class="prog" id="prog"></div>
+
+<!-- ══ NAV ══ -->
+<header id="hdr"><div class="wrap"><nav>
+  <a href="#top" class="logo"><i></i>TyF</a>
+  <div class="nlinks">
+    <a href="#how">How</a><a href="#results">Results</a><a href="#demo">Demo</a>
+    <a href="#closet">Closet</a><a href="#pricing">Pricing</a><a href="#team">Team</a>
+  </div>
+  <div class="nav-b"><a href="#join" class="btn b1">Get early access <span class="a">→</span></a></div>
+  <button class="burger" id="burger" aria-label="Menu"><span></span></button>
+</nav></div></header>
+<div class="mob" id="mob">
+  <a href="#how">How it works</a><a href="#results">Results</a><a href="#demo">Demo</a>
+  <a href="#closet">Closet</a><a href="#pricing">Pricing</a><a href="#team">Team</a>
+  <a href="#join" style="color:var(--violet)">Get early access →</a>
+</div>
+
+<!-- ══ HERO ══ -->
+<section class="hero" id="top">
+  <div class="blob blob1"></div><div class="blob blob2"></div><div class="blob blob3"></div>
+  <div class="wrap">
+    <span class="kicker">Virtual try-on · Made in India</span>
+    <h1 style="margin-top:22px">
+      <span class="word">Wear</span> <span class="word">it</span>
+      <span class="word ol">before</span><br>
+      <span class="word">you</span> <span class="word hl">buy it.</span>
+    </h1>
+
+    <div class="hero-sub">
+      <p class="lead">Two photos. One of you, one of the fit. Ten seconds later you're wearing it —
+        no changing room, no queue, no "I'll just order both sizes".</p>
+      <div class="badge">
+        <svg viewBox="0 0 120 120">
+          <defs><path id="circ" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"/></defs>
+          <circle cx="60" cy="60" r="58" fill="var(--violet)"/>
+          <text font-family="Bricolage Grotesque,sans-serif" font-size="12.5" font-weight="600" fill="#fff" letter-spacing="3.4">
+            <textPath href="#circ">· TWO PHOTOS · TEN SECONDS · ZERO QUEUES </textPath>
+          </text>
+        </svg>
+        <span class="mid" style="color:#fff">↗</span>
+      </div>
+    </div>
+
+    <div class="hero-cta">
+      <a href="#join" class="btn b1">Get early access <span class="a">→</span></a>
+      <a href="#demo" class="btn b2">Watch the demo</a>
+    </div>
+
+    <!-- ░░ HERO TRY-ON WIPE — two photos, drag to compare ░░ -->
+    <div class="wipe-wrap">
+      <div class="wipe" id="wipe">
+        <span class="pill pill-a">BEFORE</span>
+        <span class="pill pill-b">TYF ✦</span>
+        <figure class="slot" data-spec="images/hero-before.jpg · 1400×960 · your model, plain top, front-facing">
+          <img src="images/hero-before.jpg" alt="Model before try-on" onerror="this.remove()">
+        </figure>
+        <div class="after" id="after">
+          <figure class="slot v2" data-spec="images/hero-after.jpg · 1400×960 · same frame, TyF output">
+            <img src="images/hero-after.jpg" alt="Same model wearing the garment, generated by TyF" onerror="this.remove()">
+          </figure>
+        </div>
+        <div class="bar" id="bar"></div>
+        <div class="grip" id="grip" role="slider" tabindex="0" aria-label="Drag to compare" aria-valuenow="50">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#12100E" stroke-width="2.6" stroke-linecap="round"><path d="M9 6L4 12l5 6M15 6l5 6-5 6"/></svg>
+        </div>
+      </div>
+      <div class="rail">
+        <div class="card" style="background:var(--lime)"><b>~10s</b><span>per try-on</span></div>
+        <div class="card" style="background:var(--sky)"><b>2</b><span>photos needed</span></div>
+        <div class="card" style="background:var(--tang);color:var(--ink)"><b>₹299</b><span>per month</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ TICKER ══ -->
+<div class="tick b-lime" style="margin-top:clamp(60px,9vw,110px)">
+  <div class="tk"><b>Try it on</b><b>Not your size? Doesn't matter</b><b>Your closet, digitised</b><b>Fewer returns</b>
+    <b>Try it on</b><b>Not your size? Doesn't matter</b><b>Your closet, digitised</b><b>Fewer returns</b></div>
+</div>
+
+<!-- ══ PROBLEM ══ -->
+<section class="sec b-ink" id="why">
+  <div class="wrap">
+    <div class="head rv">
+      <span class="kicker">The problem</span>
+      <h2>Shopping for clothes<br>is still a <span style="color:var(--pink)">guess.</span></h2>
+      <p class="lead" style="opacity:.8">You cannot see how it sits on your body at the exact moment you have
+        to decide. So you order three sizes, or you queue outside a changing room. Both are terrible.</p>
+    </div>
+    <div class="g4">
+      <div class="tile rv"><span class="n">01</span><h3>Buying blind</h3>
+        <p>A flat photo on a stranger's body tells you nothing about yours. Order three, return two.</p></div>
+      <div class="tile rv"><span class="n">02</span><h3>The queue tax</h3>
+        <p>Wait, change, look, repeat. One garment at a time. Everyone gives up by the third.</p></div>
+      <div class="tile rv"><span class="n">03</span><h3>Nothing to wear</h3>
+        <p>A full cupboard and the same panic every morning. Outfits you own, never found.</p></div>
+      <div class="tile rv"><span class="n">04</span><h3>Tried by twenty</h3>
+        <p>Staff refold rejects all day — and you buy something twenty strangers already wore.</p></div>
+    </div>
+    <div class="statrow">
+      <div class="rv"><b>25–35%</b><p>Return rate on fashion e-commerce in India. Highest-friction category online.</p></div>
+      <div class="rv"><b>60%</b><p>Of India's fashion is still bought offline, where the fitting room is the bottleneck.</p></div>
+      <div class="rv"><b>$21.6B</b><p>India fashion e-commerce in 2025, growing ~24% a year. Friction scales with it.</p></div>
+    </div>
+    <p style="margin-top:26px;font-size:12.6px;opacity:.5">Sources: IBEF · Nexdigm India Fashion Retail Outlook 2030 · CoherentMI India Fashion Ecommerce 2025–2032.</p>
+  </div>
+</section>
+
+<!-- ══ HOW ══ -->
+<section class="sec" id="how">
+  <div class="wrap">
+    <div class="head rv">
+      <span class="kicker">How it works</span>
+      <h2>Upload two things.<br>That's the <span style="color:var(--violet)">whole app.</span></h2>
+    </div>
+    <div class="stepgrid">
+      <div class="step rv">
+        <figure class="slot" data-spec="images/step-1.jpg · 800×1000 · phone selfie, front-facing, arms relaxed">
+          <img src="images/step-1.jpg" alt="A person taking an ordinary phone photo" onerror="this.remove()"></figure>
+        <div class="k">STEP 01</div><h3>A photo of you</h3>
+        <p>Any phone, decent light, arms relaxed. The same selfie you'd send a friend works fine.</p></div>
+      <div class="step rv">
+        <figure class="slot v3" data-spec="images/step-2.jpg · 800×1000 · flat-lay garment on plain background">
+          <img src="images/step-2.jpg" alt="A flat-lay photo of a garment" onerror="this.remove()"></figure>
+        <div class="k">STEP 02</div><h3>A photo of the fit</h3>
+        <p>Screenshot it off any store, or shoot the thing lying on your bed. Both work.</p></div>
+      <div class="step rv">
+        <figure class="slot v4" data-spec="images/step-3.jpg · 800×1000 · TyF output, person wearing garment">
+          <img src="images/step-3.jpg" alt="The generated try-on result" onerror="this.remove()"></figure>
+        <div class="k">STEP 03</div><h3>You, wearing it</h3>
+        <p>Around ten seconds later. Your face, your hair, your background — completely untouched.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ RESULTS GALLERY ══ -->
+<section class="sec b-violet" id="results">
+  <div class="wrap">
+    <div class="head rv">
+      <span class="kicker">Real output</span>
+      <h2>Every image below<br>came out of the engine.</h2>
+      <p class="lead" style="opacity:.85">No retouching, no cherry-picked studio lighting. Ordinary photos in,
+        these out.</p>
+    </div>
+    <!-- ░░ DROP YOUR MODEL'S OUTPUTS HERE — images/result-1.jpg … result-6.jpg ░░ -->
+    <div class="gal">
+      <figure class="slot rv" data-spec="images/result-1.jpg · 900×1125"><span class="stamp">TYF OUTPUT</span><img src="images/result-1.jpg" alt="Try-on result" onerror="this.remove()"></figure>
+      <figure class="slot v2 rv" data-spec="images/result-2.jpg · 900×1125"><span class="stamp">TYF OUTPUT</span><img src="images/result-2.jpg" alt="Try-on result" onerror="this.remove()"></figure>
+      <figure class="slot v3 rv" data-spec="images/result-3.jpg · 900×1125"><span class="stamp">TYF OUTPUT</span><img src="images/result-3.jpg" alt="Try-on result" onerror="this.remove()"></figure>
+      <figure class="slot v4 rv" data-spec="images/result-4.jpg · 900×1125"><span class="stamp">TYF OUTPUT</span><img src="images/result-4.jpg" alt="Try-on result" onerror="this.remove()"></figure>
+      <figure class="slot rv" data-spec="images/result-5.jpg · 900×1125"><span class="stamp">TYF OUTPUT</span><img src="images/result-5.jpg" alt="Try-on result" onerror="this.remove()"></figure>
+      <figure class="slot v2 rv" data-spec="images/result-6.jpg · 900×1125"><span class="stamp">TYF OUTPUT</span><img src="images/result-6.jpg" alt="Try-on result" onerror="this.remove()"></figure>
+    </div>
+  </div>
+</section>
+
+<!-- ══ DEMO ══ -->
+<section class="sec" id="demo">
+  <div class="wrap">
+    <div class="head rv">
+      <span class="kicker">Proof of concept</span>
+      <h2>Watch it actually<br>happen.</h2>
+      <p class="lead">Our working proof of concept, recorded end to end. Every model in the pipeline was
+        trained in-house — this is not a wrapper around someone else's API.</p>
+    </div>
+    <!-- The Drive file must be shared "Anyone with the link — Viewer" for this to play.
+         To self-host later, replace the iframe with: <video src="demo.mp4" controls playsinline poster="images/poster.jpg"></video> -->
+    <div class="vid rv"><div class="v16">
+      <iframe src="https://drive.google.com/file/d/1URdqHLqRrUEZwMYtynXmNuHkyUseDD-N/preview"
+        allow="autoplay; fullscreen" allowfullscreen title="Try your Fit demo"></iframe>
+    </div></div>
+    <div class="g4" style="margin-top:22px">
+      <div><b class="disp" style="font-size:26px;color:var(--violet)">0.795</b><p style="font-size:13.4px;color:var(--grey)">SSIM · structural match</p></div>
+      <div><b class="disp" style="font-size:26px;color:var(--violet)">0.217</b><p style="font-size:13.4px;color:var(--grey)">LPIPS · perceptual match</p></div>
+      <div><b class="disp" style="font-size:26px;color:var(--violet)">44.06</b><p style="font-size:13.4px;color:var(--grey)">FID · realism</p></div>
+      <div><b class="disp" style="font-size:26px;color:var(--violet)">16 GB</b><p style="font-size:13.4px;color:var(--grey)">runs on one consumer GPU</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PRODUCT TABS ══ -->
+<section class="sec" id="product" style="padding-top:0">
+  <div class="wrap">
+    <div class="head rv" style="margin-bottom:26px">
+      <span class="kicker">The product</span>
+      <h2>One engine.<br>Two ways in.</h2>
+    </div>
+    <div class="tabs" id="tabs"><button class="tab on" data-p="0">For you</button><button class="tab" data-p="1">For business</button></div>
+
+    <div class="pane on" id="pane0" style="margin-top:40px">
+      <div class="g2">
+        <div>
+          <h3 style="font-size:clamp(26px,3.6vw,42px)">The app that already knows your wardrobe</h3>
+          <p class="lead" style="margin-top:16px;color:var(--grey)">Shoot what you own once. After that every
+            "what do I wear" gets answered in seconds — from clothes already in your cupboard, or anything
+            you're about to buy.</p>
+          <ul class="fl">
+            <li><span class="dot"></span><span><b>Try before you buy.</b> Screenshot from any store, see it on yourself.</span></li>
+            <li><span class="dot"></span><span><b>Digitise your closet.</b> Photograph each piece once, mix forever.</span></li>
+            <li><span class="dot"></span><span><b>Occasion mode.</b> Wedding, interview, first date — outfits from what you own.</span></li>
+            <li><span class="dot"></span><span><b>Share the fit.</b> Send it to the group chat before you commit.</span></li>
+          </ul>
+          <a href="#join" class="btn b1" style="margin-top:26px">Join the waitlist <span class="a">→</span></a>
+        </div>
+        <figure class="slot v2 rv" style="aspect-ratio:4/5" data-spec="images/app.jpg · 1000×1250 · app screen in hand, or UI mockup">
+          <img src="images/app.jpg" alt="The TyF app" onerror="this.remove()"></figure>
+      </div>
+    </div>
+
+    <div class="pane" id="pane1" style="margin-top:40px">
+      <div class="g2">
+        <div>
+          <h3 style="font-size:clamp(26px,3.6vw,42px)">Try-on on your product page, in a week</h3>
+          <p class="lead" style="margin-top:16px;color:var(--grey)">Drop the widget onto your listings, or call
+            the API from your own stack. For stores, kiosk mode turns a tablet at the rack into a fitting room
+            with no queue.</p>
+          <ul class="fl">
+            <li><span class="dot"></span><span><b>Product-page widget.</b> A script tag and a catalogue feed.</span></li>
+            <li><span class="dot"></span><span><b>REST API.</b> Two image URLs in, a result out, usually under ten seconds.</span></li>
+            <li><span class="dot"></span><span><b>Kiosk mode.</b> Fewer garments handled, cleaner racks, faster browsing.</span></li>
+            <li><span class="dot"></span><span><b>Catalogue rendering.</b> On-model imagery from flat-lays, in batch.</span></li>
+          </ul>
+          <a href="#join" class="btn b1" style="margin-top:26px">Book a pilot <span class="a">→</span></a>
+        </div>
+        <div style="border:3px solid var(--ink);border-radius:20px;overflow:hidden">
+          <div style="background:var(--ink);color:var(--paper);padding:12px 18px;font-family:var(--disp);font-weight:600;font-size:12.5px;letter-spacing:.14em">POST /v1/tryon</div>
+          <div style="padding:22px;font-family:ui-monospace,Menlo,monospace;font-size:13.2px;line-height:1.85;overflow-x:auto;background:#fff">
+            <div style="color:#6F6A63">// two URLs in, one image out</div>
+            <div><span style="color:#C4176F">curl</span> https://api.tryyourfit.in/v1/tryon \</div>
+            <div>&nbsp;&nbsp;-H <span style="color:var(--violet)">"Authorization: Bearer $TYF_KEY"</span> \</div>
+            <div>&nbsp;&nbsp;-d <span style="color:var(--violet)">'{"person":"…/u/91.jpg",</span></div>
+            <div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--violet)">"garment":"…/p/4417.jpg"}'</span></div>
+            <div style="margin-top:12px;color:#6F6A63">// 200 OK · 9.4s</div>
+            <div>{ "url": "…/r/8f21c.png", "ms": 9412 }</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CLOSET ══ -->
+<section class="sec b-pink" id="closet">
+  <div class="wrap">
+    <div class="head rv">
+      <span class="kicker">The closet engine</span>
+      <h2>You own more outfits<br>than you think.</h2>
+      <p class="lead">Tap what's roughly in your cupboard. Here's how many complete looks TyF can build
+        out of it — before you buy a single new thing.</p>
+    </div>
+    <div class="closet" id="cl">
+      <button class="gm on" data-t="top"><svg viewBox="0 0 60 70"><path d="M30 8c-6 0-9-3-9-3L6 13c-3 2-4 5-3 8l4 14 8-3 1 34h28l1-34 8 3 4-14c1-3 0-6-3-8L39 5s-3 3-9 3z" fill="#12100E"/></svg><em>WHITE TEE</em></button>
+      <button class="gm on" data-t="top"><svg viewBox="0 0 60 70"><path d="M30 8c-6 0-9-3-9-3L8 12c-3 1-4 4-3 7l3 12 7-2-3 37h36l-3-37 7 2 3-12c1-3 0-6-3-7L39 5s-3 3-9 3z" fill="#2D4A8A"/></svg><em>OXFORD</em></button>
+      <button class="gm on" data-t="top"><svg viewBox="0 0 60 70"><path d="M30 8c-6 0-9-3-9-3L6 13c-3 2-4 5-3 8l4 14 8-3 1 34h28l1-34 8 3 4-14c1-3 0-6-3-8L39 5s-3 3-9 3z" fill="#8E2B2B"/><path d="M6 24h48" stroke="#E0A0A0" stroke-width="2"/></svg><em>CHECK</em></button>
+      <button class="gm" data-t="top"><svg viewBox="0 0 60 70"><path d="M30 10c-7 0-10-4-10-4L5 15c-3 2-4 5-3 9l5 15 8-3 1 32h28l1-32 8 3 5-15c1-4 0-7-3-9L40 6s-3 4-10 4z" fill="#3B3B3F"/></svg><em>HOODIE</em></button>
+      <button class="gm on" data-t="bot"><svg viewBox="0 0 60 70"><path d="M14 6h32l3 20-4 40h-11l-4-30-4 30H15l-4-40z" fill="#2A3350"/></svg><em>DENIM</em></button>
+      <button class="gm on" data-t="bot"><svg viewBox="0 0 60 70"><path d="M15 6h30l2 18-3 42H32l-2-28-2 28H16l-3-42z" fill="#1C1C1E"/></svg><em>TROUSER</em></button>
+      <button class="gm" data-t="bot"><svg viewBox="0 0 60 70"><path d="M16 6h28l4 16-6 40H18l-6-40z" fill="#9A8B72"/></svg><em>CHINOS</em></button>
+      <button class="gm on" data-t="lay"><svg viewBox="0 0 60 70"><path d="M20 6L6 14c-3 2-4 5-3 8l5 16 7-3 1 29h8L20 6zm20 0l14 8c3 2 4 5 3 8l-5 16-7-3-1 29h-8L40 6z" fill="#2C2C30"/></svg><em>OVERSHIRT</em></button>
+      <button class="gm" data-t="lay"><svg viewBox="0 0 60 70"><path d="M18 8L7 15c-3 2-4 5-3 8l4 14 7-2 1 30h8L18 8zm24 0l11 7c3 2 4 5 3 8l-4 14-7-2-1 30h-8L42 8z" fill="#4A3B2E"/></svg><em>JACKET</em></button>
+      <button class="gm on" data-t="sh"><svg viewBox="0 0 60 70"><path d="M8 44h18l10 8h14a4 4 0 014 4v6H8z" fill="#fff" stroke="#12100E" stroke-width="2"/></svg><em>SNEAKERS</em></button>
+      <button class="gm on" data-t="sh"><svg viewBox="0 0 60 70"><path d="M10 40h16l12 12h10a4 4 0 014 4v6H10z" fill="#3A2A1E"/></svg><em>LOAFERS</em></button>
+      <button class="gm" data-t="sh"><svg viewBox="0 0 60 70"><path d="M12 42h14l10 10h12a4 4 0 014 4v6H12z" fill="#1C1C1E"/></svg><em>DERBY</em></button>
+    </div>
+    <div class="combo">
+      <span class="num" id="cnum">24</span>
+      <p><b id="cpc">8 pieces</b> selected — that's how many complete looks TyF can put together for you.</p>
+      <button class="rs" id="crs">Reset</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PRICING ══ -->
+<section class="sec b-lime" id="pricing">
+  <div class="wrap">
+    <div class="head rv" style="margin-bottom:26px">
+      <span class="kicker">Pricing</span>
+      <h2>Priced for India.<br>Not converted into it.</h2>
+      <p class="lead">Founding-member rates, locked for your first year. No card to join the list.</p>
+    </div>
+    <div class="tabs" id="bill"><button class="tab on" data-b="m">Monthly</button><button class="tab" data-b="y">Yearly · 2 free</button></div>
+    <div class="prices">
+      <div class="pc rv"><span class="tag">FREE</span><h3>Curious</h3>
+        <div class="amt">₹0</div><div class="per">forever</div>
+        <ul><li>5 try-ons a month</li><li>10 wardrobe pieces</li><li>Standard queue</li><li>Watermarked results</li></ul>
+        <a href="#join" class="btn b2">Start free</a></div>
+      <div class="pc star rv"><span class="tag">MOST POPULAR</span><h3>Unlimited</h3>
+        <div class="amt" data-m="₹299" data-y="₹2,499">₹299</div>
+        <div class="per" data-m="per month" data-y="per year · save ₹1,089">per month</div>
+        <ul><li>25 try-ons a day</li><li>Unlimited wardrobe</li><li>Occasion outfit builder</li><li>Priority queue, no watermark</li><li>Save &amp; share looks</li></ul>
+        <a href="#join" class="btn b1">Get early access</a></div>
+      <div class="pc rv"><span class="tag">BUSINESS</span><h3>Retail &amp; brands</h3>
+        <div class="amt">₹25K+</div><div class="per">per month + usage</div>
+        <ul><li>Widget &amp; REST API</li><li>Try-on allowance by tier</li><li>₹3–5 per try-on beyond it</li><li>In-store kiosk mode</li><li>Catalogue rendering</li></ul>
+        <a href="#join" class="btn b2">Book a pilot</a></div>
+    </div>
+    <p style="margin-top:22px;font-size:12.6px;opacity:.7">All prices in INR, exclusive of GST. Business tiers quoted on catalogue size and monthly volume.</p>
+  </div>
+</section>
+
+<!-- ══ TICKER 2 ══ -->
+<div class="tick"><div class="tk rev"><b>Built in Bengaluru</b><b>Own model, own engine</b><b>No body scan</b><b>No measurements</b>
+  <b>Built in Bengaluru</b><b>Own model, own engine</b><b>No body scan</b><b>No measurements</b></div></div>
+
+<!-- ══ TEAM ══ -->
+<section class="sec" id="team">
+  <div class="wrap">
+    <div class="head rv">
+      <span class="kicker">The team</span>
+      <h2>Three founders.<br>One very tired GPU.</h2>
+      <p class="lead" style="color:var(--grey)">TyF is built by Triye Technologies, a Bengaluru studio working
+        on applied computer vision. We built the engine before raising on it.</p>
+    </div>
+    <div class="team">
+      <div class="mem rv">
+        <figure class="slot" data-spec="images/team-akhilesh.jpg · 800×800 · headshot"><img src="images/team-akhilesh.jpg" alt="Akhilesh N Naidu" onerror="this.remove()"></figure>
+        <h3>Akhilesh N Naidu</h3><div class="role">Co-founder · AI &amp; Product</div>
+        <p>Owns the engine — architecture, training runs, evaluation, and everything that turns two uploads into a result.</p></div>
+      <div class="mem rv">
+        <figure class="slot v2" data-spec="images/team-akshay.jpg · 800×800 · headshot"><img src="images/team-akshay.jpg" alt="Akshay R Kumar" onerror="this.remove()"></figure>
+        <h3>Akshay R Kumar</h3><div class="role">Co-founder · Business</div>
+        <p>Owns the market — product vision, customer discovery, enterprise sales, partnerships and fundraising.</p></div>
+      <div class="mem rv">
+        <figure class="slot v4" data-spec="images/team-aditya.jpg · 800×800 · headshot"><img src="images/team-aditya.jpg" alt="Aditya Belludi" onerror="this.remove()"></figure>
+        <h3>Aditya Belludi</h3><div class="role">Deployment &amp; Ops</div>
+        <p>Owns the delivery — infrastructure, deployment, customer relations and compliance.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FAQ ══ -->
+<section class="sec" id="faq" style="padding-top:0">
+  <div class="wrap" style="max-width:940px">
+    <div class="head rv" style="margin-bottom:10px"><span class="kicker">Questions</span>
+      <h2>The obvious ones.</h2></div>
+    <div class="faq" id="faq">
+      <div class="q"><button>Do I need to scan my body?<span class="pm"></span></button>
+        <div class="a"><p>No. One ordinary front-facing photo is the entire input. No depth sensor, no turntable, no measurement form.</p></div></div>
+      <div class="q"><button>How accurate is it, really?<span class="pm"></span></button>
+        <div class="a"><p>On 200 held-out test pairs: SSIM 0.795, LPIPS 0.217, FID 44.06. In plain terms — body geometry and garment placement come out right, colour and print transfer faithfully, and there's a measurable gap to studio photography in the finest texture detail. We publish numbers, not adjectives.</p></div></div>
+      <div class="q"><button>What works today, and what doesn't yet?<span class="pm"></span></button>
+        <div class="a"><p>Strongest on upper-body garments with a front-facing subject and relaxed arms — tees, shirts, knits, overshirts. Full-body framing, dresses and heavily draped Indian wear are the next milestone, limited by training-data coverage rather than the architecture.</p></div></div>
+      <div class="q"><button>What happens to my photos?<span class="pm"></span></button>
+        <div class="a"><p>They generate your result and build your own wardrobe library. They are not sold, and not used to train models without explicit opt-in. Delete any image or your whole account at any time — that removes the sources and the generated results together.</p></div></div>
+      <div class="q"><button>Can retailers use their own catalogue?<span class="pm"></span></button>
+        <div class="a"><p>Yes — that's the standard business setup. Point us at a catalogue feed and the widget renders try-on on your product pages, or call the REST API from your own stack.</p></div></div>
+      <div class="q"><button>When can I actually use it?<span class="pm"></span></button>
+        <div class="a"><p>The proof of concept works now — the demo above is real output. Early access opens in waves to waitlist members, consumers first, with retail pilots in parallel.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA ══ -->
+<section class="sec" id="join" style="padding-top:0">
+  <div class="wrap"><div class="cta rv">
+    <span class="kicker" style="background:var(--lime);color:var(--ink)">Early access</span>
+    <h2>Stop guessing<br>what fits.</h2>
+    <p class="lead" style="margin:20px auto 0;text-align:center;opacity:.92">Founding members get locked pricing,
+      first access to the closet engine, and a direct line to the people building it.</p>
+    <!-- FORM is front-end only. Point it at Formspree / Google Forms / your backend before launch. -->
+    <form class="form" id="wl" novalidate>
+      <input type="email" id="em" placeholder="you@email.com" aria-label="Email" required>
+      <button class="btn b1" type="submit">Join the list <span class="a">→</span></button>
+    </form>
+    <p class="ok" id="ok">✦ You're in. We'll write when access opens.</p>
+    <p style="margin-top:14px;font-size:12.6px;opacity:.8">No spam. One email when it's ready.</p>
+  </div></div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="wrap">
+    <div class="fg">
+      <div><a href="#top" class="logo" style="font-size:26px"><i></i>TyF</a>
+        <p style="margin-top:14px;max-width:32ch">Virtual try-on built in India, for the way India actually shops — online and on the shop floor.</p></div>
+      <div><h4>Product</h4><a href="#how">How it works</a><a href="#results">Results</a><a href="#demo">Demo</a><a href="#pricing">Pricing</a></div>
+      <div><h4>Company</h4><a href="#team">Team</a><a href="#faq">FAQ</a>
+        <a href="https://www.triyetech.com/" target="_blank" rel="noopener">Triye Technologies ↗</a>
+        <a href="https://www.instagram.com/triye_technologies/" target="_blank" rel="noopener">Instagram ↗</a></div>
+      <div><h4>Contact</h4><a href="mailto:hello@triyetech.com">hello@triyetech.com</a>
+        <p>Binny Mill, Ganganagar<br>R T Nagar, Bengaluru 560032</p></div>
+    </div>
+    <div class="legal">
+      <span>© <span id="yr">2026</span> Triye Technologies Private Limited · CIN U80200KA2025PTC207532</span>
+      <span>Privacy · Terms · Made in Bengaluru</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+ 'use strict';
+ var $=function(s){return document.querySelector(s)},$$=function(s){return [].slice.call(document.querySelectorAll(s))};
+
+ /* nav + progress */
+ var hdr=$('#hdr'),prog=$('#prog');
+ function sc(){
+   hdr.classList.toggle('stuck',scrollY>16);
+   var h=document.documentElement.scrollHeight-innerHeight;
+   prog.style.width=(h>0?scrollY/h*100:0)+'%';
+ }
+ sc();addEventListener('scroll',sc,{passive:true});
+ $('#burger').addEventListener('click',function(){$('#mob').classList.toggle('open')});
+ $('#mob').addEventListener('click',function(e){if(e.target.tagName==='A')this.classList.remove('open')});
+
+ /* try-on wipe */
+ var wipe=$('#wipe'),after=$('#after'),bar=$('#bar'),grip=$('#grip'),drag=false;
+ function set(p){p=Math.max(4,Math.min(96,p));after.style.clipPath='inset(0 0 0 '+p+'%)';
+   bar.style.left=p+'%';grip.style.left=p+'%';grip.setAttribute('aria-valuenow',Math.round(p));}
+ function at(e){var r=wipe.getBoundingClientRect(),x=(e.touches?e.touches[0].clientX:e.clientX)-r.left;set(x/r.width*100);}
+ wipe.addEventListener('mousedown',function(e){drag=true;at(e);e.preventDefault()});
+ addEventListener('mousemove',function(e){if(drag)at(e)});
+ addEventListener('mouseup',function(){drag=false});
+ wipe.addEventListener('touchstart',function(e){drag=true;at(e)},{passive:true});
+ addEventListener('touchmove',function(e){if(drag)at(e)},{passive:true});
+ addEventListener('touchend',function(){drag=false});
+ grip.addEventListener('keydown',function(e){var c=+grip.getAttribute('aria-valuenow');
+   if(e.key==='ArrowLeft')set(c-4);if(e.key==='ArrowRight')set(c+4);});
+ var t0=null;
+ (function intro(ts){if(!t0)t0=ts;var p=Math.min((ts-t0)/1600,1);
+   set(93-(1-Math.pow(1-p,3))*43);if(p<1&&!drag)requestAnimationFrame(intro);})(performance.now());
+
+ /* tabs */
+ $('#tabs').addEventListener('click',function(e){var t=e.target.closest('.tab');if(!t)return;
+   $$('#tabs .tab').forEach(function(c){c.classList.remove('on')});t.classList.add('on');
+   $('#pane0').classList.toggle('on',t.dataset.p==='0');$('#pane1').classList.toggle('on',t.dataset.p==='1');});
+
+ /* billing */
+ $('#bill').addEventListener('click',function(e){var t=e.target.closest('.tab');if(!t)return;
+   $$('#bill .tab').forEach(function(c){c.classList.remove('on')});t.classList.add('on');
+   $$('[data-m]').forEach(function(el){el.textContent=t.dataset.b==='m'?el.dataset.m:el.dataset.y});});
+
+ /* closet */
+ var cl=$('#cl'),cnum=$('#cnum'),cpc=$('#cpc'),timer;
+ function count(){
+   var on=cl.querySelectorAll('.gm.on'),by={top:0,bot:0,lay:0,sh:0};
+   [].forEach.call(on,function(g){by[g.dataset.t]++});
+   var target=by.top*by.bot*Math.max(by.sh,1)*(by.lay+1),cur=+cnum.textContent||0,i=0;
+   clearInterval(timer);
+   timer=setInterval(function(){i++;cnum.textContent=Math.round(cur+(target-cur)*(i/12));
+     if(i>=12){clearInterval(timer);cnum.textContent=target}},24);
+   cpc.textContent=on.length+(on.length===1?' piece':' pieces');
+ }
+ cl.addEventListener('click',function(e){var g=e.target.closest('.gm');if(!g)return;g.classList.toggle('on');count()});
+ $('#crs').addEventListener('click',function(){
+   [].forEach.call(cl.children,function(g,i){g.classList.toggle('on',[0,1,2,4,5,7,9,10].indexOf(i)>-1)});count()});
+ count();
+
+ /* faq */
+ $('#faq').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;
+   var q=b.parentElement,a=q.querySelector('.a'),open=q.classList.contains('open');
+   $$('#faq .q').forEach(function(o){o.classList.remove('open');o.querySelector('.a').style.maxHeight=null});
+   if(!open){q.classList.add('open');a.style.maxHeight=a.scrollHeight+'px'}});
+
+ /* form */
+ $('#wl').addEventListener('submit',function(e){e.preventDefault();
+   var v=$('#em').value.trim();
+   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)){$('#em').style.boxShadow='5px 5px 0 #FF6A1F';return}
+   this.style.display='none';$('#ok').classList.add('show');
+   /* TODO: POST v to your endpoint */});
+
+ /* reveal */
+ var io=new IntersectionObserver(function(en){en.forEach(function(x){
+   if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}})},{threshold:.12,rootMargin:'0px 0px -40px'});
+ $$('.rv').forEach(function(el,i){el.style.transitionDelay=(i%4)*70+'ms';io.observe(el)});
+
+ $('#yr').textContent=new Date().getFullYear();
+})();
+</script>
+</body>
+</html>

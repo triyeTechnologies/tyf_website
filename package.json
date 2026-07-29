@@ -1,0 +1,21 @@
+{
+  "name": "tyf-web",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Try your Fit — marketing site, waitlist + pilot API, and admin console.",
+  "type": "module",
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "scripts": {
+    "start": "node --no-warnings=ExperimentalWarning server/index.js",
+    "dev": "node --watch --no-warnings=ExperimentalWarning server/index.js",
+    "db:reset": "node --no-warnings=ExperimentalWarning scripts/reset-db.js",
+    "db:seed": "node --no-warnings=ExperimentalWarning scripts/seed-db.js",
+    "export": "node --no-warnings=ExperimentalWarning scripts/export-csv.js",
+    "token": "node --no-warnings=ExperimentalWarning scripts/make-token.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
