@@ -1033,11 +1033,31 @@
 
   /* ── team ───────────────────────────────────────────────────────────── */
   .team{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-  /* A headshot stretched to a third of the page reads as a billboard. At this
-     size, with the 18px corner radius the slot already carries, it reads as an
-     app icon instead — which is the intent. Fixed rather than fluid: below
-     ~100px a face stops being legible, so it should not shrink further. */
-  .mem .slot{aspect-ratio:1/1;margin-bottom:16px;width:96px;max-width:100%}
+  .mem{position:relative;text-align:center}
+  /* Round, app-icon sized, centred over the name rather than sitting left of
+     it. Fixed rather than fluid: below ~90px a face stops being legible. */
+  .mem .slot{
+    aspect-ratio:1/1;width:96px;margin:0 auto 16px;border-radius:50%;
+    transition:transform .45s var(--e),box-shadow .45s var(--e);
+  }
+  /* One neon arc orbiting the portrait — the same conic sweep and the same
+     single accent colour the rest of the page uses, so it reads as part of the
+     system rather than a new idea. Parked until hover: three of these turning
+     while you are trying to read the bios would be noise, not motion. The
+     mask keeps only the outer 2px, which is what makes it a ring and not a
+     disc. `spin` is the keyframe already defined in the motion layer, and the
+     reduced-motion block above stops it along with everything else. */
+  .mem::before{
+    content:"";position:absolute;top:-8px;left:50%;margin-left:-56px;
+    width:112px;height:112px;border-radius:50%;z-index:0;pointer-events:none;
+    background:conic-gradient(from 0deg,transparent 0 58%,var(--neon) 78%,transparent 88%);
+    -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 2px),#000 calc(100% - 2px));
+    mask:radial-gradient(farthest-side,transparent calc(100% - 2px),#000 calc(100% - 2px));
+    opacity:0;transition:opacity .4s var(--e);
+    animation:spin 3.6s linear infinite;animation-play-state:paused;
+  }
+  .mem:hover::before{opacity:1;animation-play-state:running}
+  .mem:hover .slot{transform:translateY(-4px);box-shadow:0 14px 34px -12px var(--neon-glow)}
   .mem h3{margin-bottom:6px}
   .mem .role{
     font-family:var(--disp);font-weight:600;font-size:12px;letter-spacing:.16em;
