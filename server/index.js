@@ -7,6 +7,7 @@ import { env } from './config/env.js';
 import { closeDatabase } from './db/index.js';
 import { runMigrations } from './db/migrations.js';
 import { logger, paint } from './utils/logger.js';
+import { captureServerError, flush as flushSentry, isEnabled as sentryOn } from './utils/sentry.js';
 
 /** Host and database name only — never print the password in the banner. */
 function describeDatabase() {
@@ -47,6 +48,7 @@ const server = app.listen(env.PORT, env.HOST, () => {
   console.log(`  api     ${paint.dim(`${base}/api/v1/health`)}`);
   console.log(`  env     ${paint.dim(env.NODE_ENV)}`);
   console.log(`  db      ${paint.dim(describeDatabase())}`);
+  console.log(`  errors  ${paint.dim(sentryOn ? 'sentry' : 'console only — set SENTRY_DSN to report')}`);
   console.log('');
 
   if (env.ADMIN_TOKEN_IS_GENERATED) {
@@ -105,10 +107,18 @@ process.on('SIGTERM', () => shutdown('SIGTERM'));
 
 process.on('unhandledRejection', (reason) => {
   logger.error('unhandled promise rejection:', reason);
+  captureServerError(reason instanceof Error ? reason : new Error(String(reason)), {
+    status: 500,
+    url: 'process:unhandledRejection',
+  });
 });
 
-process.on('uncaughtException', (error) => {
+process.on('uncaughtException', async (error) => {
   logger.error('uncaught exception:', error);
+  captureServerError(error, { status: 500, url: 'process:uncaughtException' });
+  // The process is going down either way; give the report a moment to leave
+  // first, or the one error that explains the crash is the one that is lost.
+  await flushSentry(2000);
   shutdown('uncaughtException');
 });
 

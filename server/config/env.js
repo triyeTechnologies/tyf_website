@@ -136,6 +136,14 @@ export const env = Object.freeze({
 
   /* logging */
   LOG_LEVEL: str('LOG_LEVEL', IS_PROD ? 'info' : 'debug'),
+
+  /* error reporting — optional.
+     Unset, nothing is sent anywhere and no account is needed, which is what
+     local development wants. */
+  SENTRY_DSN: str('SENTRY_DSN'),
+  // Vercel sets the commit hash on every deployment; it lets a reported error
+  // name the exact code that produced it.
+  RELEASE: str('VERCEL_GIT_COMMIT_SHA').slice(0, 7),
 });
 
 export default env;

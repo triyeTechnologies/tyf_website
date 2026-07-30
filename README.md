@@ -271,6 +271,28 @@ NODE_ENV=production TRUST_PROXY=1 npm start
 `TRUST_PROXY` matters behind a reverse proxy — without it every request appears
 to come from the proxy, and one visitor's rate limit is everyone's.
 
+### Errors
+
+Set `SENTRY_DSN` in the Vercel project and server faults are reported as they
+happen. Without it nothing is sent and errors go to the console, which is what
+local development wants.
+
+Three things about how it is wired, because each is easy to get wrong:
+
+- **Only 5xx is reported.** A rejected email address or a malformed body is
+  the caller being wrong, not a defect. Reporting those means a real outage
+  arrives as one more line in a list nobody reads.
+- **The request body is never attached**, and `Authorization`, `Cookie` and
+  `X-Admin-Token` are redacted before sending. Signup emails and the admin
+  token do not leave the process — verified against a mock ingest endpoint,
+  not assumed.
+- **Events are flushed before the response is sent.** A serverless instance is
+  frozen the moment it answers, and anything still queued freezes with it. The
+  wait is only ever paid on a request that has already failed.
+
+The `requestId` in the error envelope, the log line and the Sentry tag are the
+same value, so one id ties all three together.
+
 ### Backups
 
 Supabase takes its own, and `npm run export` writes both tables to CSV if you

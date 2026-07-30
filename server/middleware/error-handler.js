@@ -8,6 +8,7 @@ import { env } from '../config/env.js';
 import { HttpError } from '../utils/http-error.js';
 import { logger } from '../utils/logger.js';
 import { wantsJson } from '../utils/request.js';
+import { captureServerError, flush as flushSentry } from '../utils/sentry.js';
 import { renderErrorPage } from '../views/error.view.js';
 
 /**
@@ -38,7 +39,7 @@ function classify(error) {
   return { status: 500, code: 'internal_error', message: 'Something went wrong on our side.', known: false };
 }
 
-export function errorHandler(error, req, res, next) {
+export async function errorHandler(error, req, res, next) {
   if (res.headersSent) {
     next(error);
     return;
@@ -53,6 +54,21 @@ export function errorHandler(error, req, res, next) {
     logger.error(`unhandled error on ${req.method} ${req.originalUrl} [${req.id}]`, error);
   } else if (status >= 500) {
     logger.error(`${status} on ${req.method} ${req.originalUrl}:`, error.message);
+  }
+
+  // Only genuine server faults are worth waking someone for. A 4xx is the
+  // caller being wrong, and reporting those would bury the real ones.
+  if (status >= 500) {
+    captureServerError(error, {
+      requestId: req.id,
+      method: req.method,
+      url: req.originalUrl,
+      status,
+    });
+    // Flush before answering, not after: on Vercel the instance is frozen the
+    // moment the response ends, taking the unsent queue with it. The wait is
+    // only ever paid on a request that has already failed.
+    await flushSentry();
   }
 
   if (error.headers) {
