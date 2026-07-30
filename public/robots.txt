@@ -10,4 +10,4 @@ Allow: /
 Disallow: /admin
 Disallow: /api/
 
-Sitemap: https://tryyourfit.in/sitemap.xml
+Sitemap: https://triyefit.vercel.app/sitemap.xml

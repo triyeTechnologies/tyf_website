@@ -1,0 +1,20 @@
+# Weekly dependency checks. Four runtime dependencies today, and this is the
+# cheapest insurance there is against the fifth one turning out to be a
+# problem — it opens a pull request rather than changing anything itself.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      # One PR for routine patch/minor bumps; majors still arrive on their own,
+      # because those are the ones worth reading.
+      minor-and-patch:
+        update-types: [minor, patch]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

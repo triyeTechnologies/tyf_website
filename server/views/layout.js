@@ -7,6 +7,19 @@
 import { html, raw } from './html.js';
 
 export const THEME = raw(`
+  /* Self-hosted, same two files the public page uses — so the admin console
+     costs no extra download, and the CSP can refuse external fonts outright.
+     Absolute paths: a relative one would resolve against /admin/. */
+  @font-face{
+    font-family:'Bricolage Grotesque';font-style:normal;font-weight:400 800;
+    font-stretch:100%;font-display:swap;
+    src:url('/fonts/bricolage-grotesque-latin.woff2') format('woff2');
+  }
+  @font-face{
+    font-family:'Inter';font-style:normal;font-weight:400 600;font-display:swap;
+    src:url('/fonts/inter-latin.woff2') format('woff2');
+  }
+
   :root{
     /* the same three colours as the public site */
     --black:#0A0A0C; --white:#FFFFFF; --neon:#C2FF33;
@@ -75,9 +88,8 @@ ${html`<html lang="en">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <title>${title}</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preload" href="/fonts/bricolage-grotesque-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
 <style>${THEME}${raw(head)}</style>
 </head>
 <body class="${bodyClass}">

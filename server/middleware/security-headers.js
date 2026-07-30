@@ -23,8 +23,11 @@ const CSP = [
   "frame-ancestors 'none'",
   "form-action 'self'",
   "script-src 'self' 'unsafe-inline'",
-  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-  'font-src https://fonts.gstatic.com data:',
+  "style-src 'self' 'unsafe-inline'",
+  // Fonts are served from this origin now, so nothing external is allowed to
+  // supply one. A stylesheet injected into the page cannot pull a font from
+  // anywhere else, and no visitor request leaves for a third party.
+  "font-src 'self'",
   "img-src 'self' data: blob:",
   // The demo film is served from this origin, so nothing external is embedded.
   "media-src 'self'",
