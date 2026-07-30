@@ -6,6 +6,13 @@
  *   - Google Fonts (stylesheet + font files)
  *   - the Google Drive demo iframe
  *   - inline <style>/<script>, because the whole site is one file
+ *
+ * KEEP IN SYNC WITH vercel.json.
+ * This middleware only sees requests that reach the Express function — on
+ * Vercel that is /api/v1/* and /admin* alone. The site itself is served from
+ * the CDN and never runs this code, so the same policy is repeated under
+ * `headers` in vercel.json. Change one, change the other. The duplication is
+ * the price of serving the page from the edge instead of through a function.
  */
 import { env } from '../config/env.js';
 

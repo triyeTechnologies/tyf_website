@@ -1,0 +1,21 @@
+# Files that have no business in a deployment. `public/` and `api/` are what
+# ship; everything the build does not read is upload time you pay on every
+# deploy.
+#
+# Same syntax as .gitignore — a `#` only starts a comment at the start of a
+# line, so every pattern below stands alone.
+
+# the previous single-file site, kept only for reference
+archive/
+
+# the local development database
+docker-compose.yml
+
+# leftover local database files, should any reappear
+data/
+
+# CSV exports written by `npm run export`
+exports/
+
+.env*
+README.md
