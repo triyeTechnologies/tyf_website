@@ -31,6 +31,22 @@ Nine complete looks, each three files. These are live on the site now.
   path from the number on the button, so nothing else needs touching. A
   gallery tile is a separate copy-paste in the RESULTS section.
 
+  CACHING — why these are not cached for a year.
+
+  They were, with `immutable`, and it was wrong. `immutable` promises the
+  browser that a URL's content will NEVER change, so it stops checking
+  entirely. That is only safe when the filename carries a content hash. These
+  names stay the same while the picture behind them changes, so replacing a
+  photo left every browser that had already loaded the page showing the old
+  one — for a year, with no way to tell anything was stale.
+
+  vercel.json now sends max-age=300 with stale-while-revalidate on /images
+  and /videos: still instant from cache, but a swap appears within minutes
+  instead of never. Fonts keep `immutable`, because those filenames really do
+  only change when the file does.
+
+  Do not put `immutable` back unless the filenames start carrying hashes.
+
   SAVE THESE AS ACTUAL WEBP. All 27 arrived once as JPEG carrying a .webp
   extension, which the browser mostly gets away with by sniffing — but the
   server sets Content-Type from the extension, so the file is lying to every
