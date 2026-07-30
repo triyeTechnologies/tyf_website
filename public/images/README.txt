@@ -29,12 +29,21 @@ Seven complete looks, each three files. These are live on the site now.
   would cut that to roughly 700 KB with no visible difference — worth doing
   before launch.
 
+in use
+──────────────────────────────────────────────────────────────────────────
+  app.png               928 x 1152   app screen · PRODUCT section
+  team-akhilesh.webp    640 x 640    headshot
+  team-akshay.webp      640 x 640    headshot
+  team-aditya.webp      473 x 640    headshot · cropped square by object-fit
+
+  app.png is ~1.2 MB, which is most of the page's image weight on its own.
+  As a WebP at quality 82 it would be well under 200 KB with no visible
+  difference. It loads lazily and sits below the fold, so it costs nothing
+  on first paint — but it is still the first thing to fix on a slow
+  connection.
+
 still placeholders
 ──────────────────────────────────────────────────────────────────────────
-  app.jpg              1000 x 1250   app screen in hand, or a UI mockup
-  team-akhilesh.jpg     800 x 800    headshot
-  team-akshay.jpg       800 x 800    headshot
-  team-aditya.jpg       800 x 800    headshot
   og.jpg               1200 x 630    social share card
 
 closet/ — the outfit calculator tiles  (IN USE)

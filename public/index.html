@@ -1033,7 +1033,10 @@
 
   /* ── team ───────────────────────────────────────────────────────────── */
   .team{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-  .mem .slot{aspect-ratio:1/1;margin-bottom:16px}
+  /* A headshot stretched to a third of the page reads as a billboard. Capped
+     so it stays a portrait next to the text, and shrinks with the column
+     rather than fighting it. */
+  .mem .slot{aspect-ratio:1/1;margin-bottom:16px;width:100%;max-width:200px}
   .mem h3{margin-bottom:6px}
   .mem .role{
     font-family:var(--disp);font-weight:600;font-size:12px;letter-spacing:.16em;
@@ -1671,8 +1674,9 @@
           <a href="#join" class="btn b1 mt-m" data-magnetic>Join the waitlist <span class="a">→</span></a>
         </div>
         <figure class="slot v2" data-reveal="right" style="aspect-ratio:4/5"
-                data-spec="images/app.jpg · 1000×1250 · app screen in hand, or UI mockup">
-          <img src="images/app.jpg" alt="The TyF app"></figure>
+                data-spec="images/app.png · 928×1152 · app screen">
+          <img src="images/app.png" alt="The TyF app showing a wardrobe of saved garments"
+               loading="lazy" decoding="async"></figure>
       </div>
     </div>
 
@@ -1983,18 +1987,18 @@
 
     <div class="team">
       <div class="mem" data-reveal="up">
-        <figure class="slot" data-spec="images/team-akhilesh.jpg · 800×800 · headshot"><img src="images/team-akhilesh.jpg" alt="Akhilesh N Naidu"></figure>
+        <figure class="slot" data-spec="images/team-akhilesh.webp · 640×640 · headshot"><img src="images/team-akhilesh.webp" alt="Akhilesh N Naidu" loading="lazy" decoding="async"></figure>
         <h3>Akhilesh N Naidu</h3><div class="role">Co-founder · AI &amp; Product</div>
         <p>Owns the engine — architecture, training runs, evaluation, and everything that turns two uploads into a result.</p>
       </div>
       <div class="mem" data-reveal="up" style="--d:110ms">
-        <figure class="slot v2" data-spec="images/team-akshay.jpg · 800×800 · headshot"><img src="images/team-akshay.jpg" alt="Akshay R Kumar"></figure>
+        <figure class="slot v2" data-spec="images/team-akshay.webp · 640×640 · headshot"><img src="images/team-akshay.webp" alt="Akshay R Kumar" loading="lazy" decoding="async"></figure>
         <h3>Akshay R Kumar</h3><div class="role">Co-founder · Business</div>
         <p>Owns the market — product vision, customer discovery, enterprise sales, partnerships and fundraising.</p>
       </div>
       <div class="mem" data-reveal="up" style="--d:220ms">
-        <figure class="slot v4" data-spec="images/team-aditya.jpg · 800×800 · headshot"><img src="images/team-aditya.jpg" alt="Aditya Belludi"></figure>
-        <h3>Aditya Belludi</h3><div class="role">Deployment &amp; Ops</div>
+        <figure class="slot v4" data-spec="images/team-aditya.webp · 473×640 · headshot"><img src="images/team-aditya.webp" alt="Aditya Belludi" loading="lazy" decoding="async"></figure>
+        <h3>Aditya Belludi</h3><div class="role">Co-founder · Deployment &amp; Ops</div>
         <p>Owns the delivery — infrastructure, deployment, customer relations and compliance.</p>
       </div>
     </div>
