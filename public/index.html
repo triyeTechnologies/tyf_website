@@ -299,6 +299,13 @@
   /* a screenshot framed edge to edge reads as a document; a little push in
      past the chrome makes it read as a product */
   .slot.zoom > img{transform:scale(1.08)}
+  /* Pulls back from the `cover` crop. Shrinking the image would only make the
+     same crop smaller, so this contains it — showing the whole frame — and
+     scales back up to meet cover partway, which reveals more of the picture.
+     At 1.36 it is exactly cover; below that it stops filling the width and the
+     slot shows as slivers at the left and right. Lower the number to see more
+     of the photo, at the cost of wider slivers. */
+  .slot.wide > img{object-fit:contain;transform:scale(1.22)}
   .slot.is-filled::before,.slot.is-filled::after{opacity:0}
 
   /* ── inputs strip ───────────────────────────────────────────────────────
@@ -1450,7 +1457,9 @@
 
     <div class="hero-cta stage">
       <a href="#join" class="btn b1" data-magnetic>Get early access <span class="a">→</span></a>
-      <a href="#demo" class="btn b2" data-magnetic>Watch the demo</a>
+      <!-- points at the film itself, not the section: #demo lands on the
+           heading and leaves the video below the fold on a laptop -->
+      <a href="#film" class="btn b2" data-magnetic>Watch the demo</a>
       <!-- Filled from GET /api/v1/stats; stays hidden while the list is small. -->
       <span class="social" id="social" hidden>
         <span class="avs"><i></i><i></i><i></i></span>
@@ -1747,7 +1756,7 @@
          no third-party embed. The #t=2 fragment parks it two seconds in so the
          still is real picture rather than the opening frame — raise it to #t=4
          if the film takes longer to get going. -->
-    <div class="vid" data-reveal="scale">
+    <div class="vid" id="film" data-reveal="scale">
       <div class="v16">
         <video id="demoVideo" src="videos/tyf-demo.mp4#t=2" preload="metadata" controls playsinline
                width="1280" height="720" title="Try your Fit demo">
@@ -2140,7 +2149,7 @@
   <div class="wrap">
     <div class="head">
       <span class="kicker" data-reveal="up">The team</span>
-      <h2 data-split>Three founders.<br>One very tired GPU.</h2>
+      <h2 data-split>Three founders.</h2>
       <p class="lead t-muted" data-reveal="up" style="--d:120ms">TyF is built by Triye Technologies, a Bengaluru studio
         working on applied computer vision. We built the engine before raising on it.</p>
     </div>
@@ -2157,7 +2166,7 @@
         <p>Owns the market — product vision, customer discovery, enterprise sales, partnerships and fundraising.</p>
       </div>
       <div class="mem" data-reveal="up" style="--d:220ms">
-        <figure class="slot v4" data-spec="images/team-aditya.webp · 473×640 · headshot"><img src="images/team-aditya.webp" alt="Aditya Belludi" loading="lazy" decoding="async"></figure>
+        <figure class="slot v4 wide" data-spec="images/team-aditya.webp · 473×640 · headshot"><img src="images/team-aditya.webp" alt="Aditya Belludi" loading="lazy" decoding="async"></figure>
         <h3>Aditya Belludi</h3><div class="role">Co-founder · Deployment &amp; Ops</div>
         <p>Owns the delivery — infrastructure, deployment, customer relations and compliance.</p>
       </div>
