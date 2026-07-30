@@ -107,6 +107,44 @@ export async function exportCsv(req, res) {
   res.send(toCsv(await dataset.load(), dataset.columns));
 }
 
+/**
+ * Where to send the browser after a write. Deleting the last row of page 4
+ * should not silently drop you back on page 1 with your search cleared, so the
+ * forms post back the view you were looking at and it is rebuilt here.
+ */
+function backToList(body, tab) {
+  const params = new URLSearchParams({ tab });
+
+  const search = String(body?.q ?? '').trim().slice(0, 80);
+  if (search) params.set('q', search);
+
+  const page = Number.parseInt(String(body?.page ?? ''), 10);
+  if (Number.isFinite(page) && page > 1) params.set('page', String(page));
+
+  return `/admin?${params}`;
+}
+
+const DATASETS = { waitlist, pilots };
+
+/**
+ * Deletes one row from either table. There is no undo, so the button that
+ * reaches this confirms first, and the deletion is logged with the id.
+ */
+export async function deleteRow(req, res) {
+  const name = String(req.params.dataset ?? '');
+  const source = Object.hasOwn(DATASETS, name) ? DATASETS[name] : null;
+  if (!source) throw notFound('No such list.');
+
+  const id = Number.parseInt(req.params.id, 10);
+  if (!Number.isFinite(id)) throw badRequest('Bad request id.');
+
+  const deleted = await source.remove(id);
+  if (!deleted) throw notFound('That row no longer exists.');
+
+  logger.warn(`admin deleted ${name} #${id}`);
+  res.redirect(303, backToList(req.body, name));
+}
+
 export async function updatePilotStatus(req, res) {
   const id = Number.parseInt(req.params.id, 10);
   const status = String(req.body?.status ?? '');
@@ -119,7 +157,7 @@ export async function updatePilotStatus(req, res) {
   const updated = await pilots.updateStatus(id, status);
   if (!updated) throw notFound('That pilot request no longer exists.');
 
-  res.redirect(303, '/admin?tab=pilots');
+  res.redirect(303, backToList(req.body, 'pilots'));
 }
 
-export default { loginPage, login, logout, dashboard, exportCsv, updatePilotStatus };
+export default { loginPage, login, logout, dashboard, exportCsv, updatePilotStatus, deleteRow };

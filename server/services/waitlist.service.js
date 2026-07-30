@@ -77,6 +77,14 @@ export const listAllForExport = () =>
         FROM waitlist_members
         ORDER BY created_at DESC, id DESC`);
 
+/**
+ * Removes one member. Returns the deleted row, or null if the id was already
+ * gone — which lets the caller tell "deleted" apart from "never existed"
+ * instead of reporting success either way.
+ */
+export const remove = (id) =>
+  one('DELETE FROM waitlist_members WHERE id = $1 RETURNING id, email', [id]);
+
 /** Signups per day for the admin sparkline. */
 export const dailySignups = (days) =>
   many(
@@ -88,4 +96,4 @@ export const dailySignups = (days) =>
     [days],
   );
 
-export default { join, countMembers, countSince, list, listAllForExport, dailySignups };
+export default { join, countMembers, countSince, list, listAllForExport, dailySignups, remove };

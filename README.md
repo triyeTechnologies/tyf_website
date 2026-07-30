@@ -145,8 +145,13 @@ Behaviour worth knowing:
 `http://localhost:3000/admin` — sign in with `ADMIN_TOKEN`.
 
 Waitlist and pilot tables with search and paging, a 30-day signup sparkline,
-per-request status (`new → contacted → qualified → closed`), and CSV export.
-Scripts can skip the login and send `Authorization: Bearer $ADMIN_TOKEN`.
+per-request status (`new → contacted → qualified → closed`), per-row delete,
+and CSV export. Scripts can skip the login and send
+`Authorization: Bearer $ADMIN_TOKEN`.
+
+Delete asks for confirmation and names the row, because there is no undo —
+export first if you want a copy. Both delete and status changes return you to
+the page and search you were on rather than resetting to the top of the list.
 
 Or export without the browser:
 
@@ -230,6 +235,14 @@ vercel env add DATABASE_URL production    # Supabase *transaction pooler*, port 
 Supabase's integration may only expose the direct connection string. Take the
 pooler one from the Supabase dashboard instead — the direct port exhausts its
 connection slots under serverless traffic.
+
+**Put the function in the same region as the database.** `vercel.json` pins it
+to `bom1` (Mumbai) to match a Supabase project in `ap-south-1`. Vercel defaults
+to `iad1` in Virginia, and the admin console renders eight queries per page
+load: across that distance it took over two seconds, and next to the database
+it is imperceptible. **If you host the database anywhere else, change
+`regions` to match it** — this single line is worth more than every other
+performance change in this file.
 
 **3 — create the tables**, once, from your machine:
 

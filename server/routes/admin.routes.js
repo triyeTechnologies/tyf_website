@@ -33,5 +33,8 @@ adminRouter.get('/', asyncHandler(admin.dashboard));
 // dot out of the pattern avoids relying on path-to-regexp v8 parsing rules.
 adminRouter.get('/export/:dataset', asyncHandler(admin.exportCsv));
 adminRouter.post('/pilots/:id/status', asyncHandler(admin.updatePilotStatus));
+// `:dataset` is matched against a fixed whitelist in the controller, so this
+// cannot be pointed at anything but the two lists.
+adminRouter.post('/:dataset/:id/delete', asyncHandler(admin.deleteRow));
 
 export default adminRouter;

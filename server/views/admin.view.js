@@ -48,6 +48,12 @@ const STYLES = `
   .note{max-width:44ch;color:var(--muted);font-size:13.2px}
   .status-form{display:flex;gap:6px;align-items:center}
   .status-form select{padding:6px 10px;font-size:12.5px;border-radius:8px}
+  td.act{width:1%;white-space:nowrap;text-align:right}
+  /* Destructive, so it stays quiet until you are actually pointing at it. */
+  .btn.danger{padding:6px 12px;font-size:12.5px;opacity:.55;transition:opacity .18s,background .18s,border-color .18s,color .18s}
+  tbody tr:hover .btn.danger{opacity:1}
+  .btn.danger:hover{background:#ff4d4d;border-color:#ff4d4d;color:#fff}
+  .btn.danger:focus-visible{opacity:1}
   .empty{padding:56px 20px;text-align:center;color:var(--muted)}
   .empty b{display:block;font-family:var(--disp);font-size:19px;color:var(--white);margin-bottom:8px}
   .pager{display:flex;align-items:center;gap:12px;justify-content:space-between;padding:14px 18px;
@@ -90,12 +96,48 @@ const dateCell = (value) => {
   });
 };
 
-function waitlistTable(rows) {
+/**
+ * The delete button. Deleting is irreversible and these are real signups, so
+ * the row is named in the prompt — a bare "are you sure?" is a dialog people
+ * dismiss without reading.
+ *
+ * The row's name goes in `data-confirm` and is read back through the DOM by
+ * CONFIRM_SCRIPT, never interpolated into an `onsubmit` handler. Inside an
+ * inline handler the browser decodes HTML entities BEFORE the JavaScript is
+ * parsed, so an escaped apostrophe turns back into a real one and a company
+ * called `'); alert(1); //` would execute. In an ordinary attribute read with
+ * getAttribute, escaping is the whole defence and the value is only ever data.
+ *
+ * The hidden fields carry the page and search back, so the redirect after a
+ * delete returns you to the view you were looking at.
+ */
+const deleteButton = ({ dataset, id, label, page, search }) => html`
+  <form method="post" action="/admin/${dataset}/${id}/delete"
+        data-confirm="Delete ${label}?
+
+This cannot be undone.">
+    <input type="hidden" name="page" value="${page}">
+    <input type="hidden" name="q" value="${search}">
+    <button class="btn ghost danger" type="submit" aria-label="Delete ${label}">Delete</button>
+  </form>`;
+
+/**
+ * One delegated listener for every confirm-on-submit form. Static text, so
+ * there is nothing user-supplied inside the script itself.
+ */
+const CONFIRM_SCRIPT = `
+  document.addEventListener('submit', function (event) {
+    var message = event.target.getAttribute && event.target.getAttribute('data-confirm');
+    if (message && !window.confirm(message)) event.preventDefault();
+  });
+`;
+
+function waitlistTable(rows, { page, search }) {
   if (!rows.length) {
     return html`<div class="empty"><b>No signups yet.</b>The form on the site writes here the moment someone joins.</div>`;
   }
   return html`<table>
-    <thead><tr><th>#</th><th>Email</th><th>Source</th><th>Referrer</th><th>Joined</th></tr></thead>
+    <thead><tr><th>#</th><th>Email</th><th>Source</th><th>Referrer</th><th>Joined</th><th></th></tr></thead>
     <tbody>${rows.map(
       (row) => html`<tr>
         <td class="num">${row.id}</td>
@@ -103,17 +145,24 @@ function waitlistTable(rows) {
         <td><span class="chip">${row.source}</span></td>
         <td class="note mono">${row.referrer || '—'}</td>
         <td class="muted mono">${dateCell(row.created_at)}</td>
+        <td class="act">${deleteButton({
+          dataset: 'waitlist',
+          id: row.id,
+          label: row.email,
+          page,
+          search,
+        })}</td>
       </tr>`,
     )}</tbody>
   </table>`;
 }
 
-function pilotTable(rows) {
+function pilotTable(rows, { page, search }) {
   if (!rows.length) {
     return html`<div class="empty"><b>No pilot requests yet.</b>Business enquiries from the site land here.</div>`;
   }
   return html`<table>
-    <thead><tr><th>#</th><th>Company</th><th>Contact</th><th>Scale</th><th>Message</th><th>Status</th><th>Received</th></tr></thead>
+    <thead><tr><th>#</th><th>Company</th><th>Contact</th><th>Scale</th><th>Message</th><th>Status</th><th>Received</th><th></th></tr></thead>
     <tbody>${rows.map(
       (row) => html`<tr>
         <td class="num">${row.id}</td>
@@ -128,6 +177,8 @@ function pilotTable(rows) {
         <td class="note">${row.message || '—'}</td>
         <td>
           <form class="status-form" method="post" action="/admin/pilots/${row.id}/status">
+            <input type="hidden" name="page" value="${page}">
+            <input type="hidden" name="q" value="${search}">
             <select name="status" aria-label="Status for ${row.company}">
               ${STATUSES.map(
                 (status) =>
@@ -138,6 +189,13 @@ function pilotTable(rows) {
           </form>
         </td>
         <td class="muted mono">${dateCell(row.created_at)}</td>
+        <td class="act">${deleteButton({
+          dataset: 'pilots',
+          id: row.id,
+          label: row.company,
+          page,
+          search,
+        })}</td>
       </tr>`,
     )}</tbody>
   </table>`;
@@ -204,10 +262,15 @@ export function renderAdminPage({ tab, rows, total, page, pages, search, stats }
         </div>
 
         <div class="panel">
-          ${raw(tab === 'pilots' ? pilotTable(rows) : waitlistTable(rows))}
+          ${raw(
+            tab === 'pilots'
+              ? pilotTable(rows, { page, search })
+              : waitlistTable(rows, { page, search }),
+          )}
           ${raw(pager({ tab, page, pages, total, search }))}
         </div>
       </main>
+      <script>${raw(CONFIRM_SCRIPT)}</script>
     `,
   });
 }

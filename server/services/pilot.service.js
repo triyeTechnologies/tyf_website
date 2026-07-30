@@ -62,6 +62,10 @@ export const listAllForExport = () =>
         FROM pilot_requests
         ORDER BY created_at DESC, id DESC`);
 
+/** Returns the deleted row, or null if the id was already gone. */
+export const remove = (id) =>
+  one('DELETE FROM pilot_requests WHERE id = $1 RETURNING id, company', [id]);
+
 /** Returns the updated row, or null if the status is unknown or the id is gone. */
 export async function updateStatus(id, status) {
   if (!STATUSES.includes(status)) return null;
@@ -75,6 +79,7 @@ export default {
   list,
   listAllForExport,
   updateStatus,
+  remove,
   SEGMENTS,
   STATUSES,
 };
