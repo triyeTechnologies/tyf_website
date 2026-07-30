@@ -11,7 +11,7 @@ const STYLES = `
     box-shadow:inset 0 1px 0 var(--glass-hi);position:relative;overflow:hidden}
   .stat b{display:block;font-family:var(--disp);font-weight:800;font-size:38px;letter-spacing:-.05em;line-height:1}
   .stat span{display:block;margin-top:8px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
-  .stat.accent b{color:var(--neon);text-shadow:0 0 30px var(--neon-glow)}
+  .stat.accent b{color:var(--neon-deep);text-shadow:0 0 30px var(--neon-glow)}
   .spark{grid-column:span 2;display:flex;flex-direction:column;justify-content:space-between}
   .spark svg{width:100%;height:52px;margin-top:10px;overflow:visible}
 
@@ -36,15 +36,15 @@ const STYLES = `
   tbody tr{transition:background .18s}
   tbody tr:hover{background:rgba(255,255,255,.04)}
   td.num{color:var(--muted);font-family:ui-monospace,Menlo,monospace;font-size:12.5px;width:1%}
-  td a.mail{border-bottom:1px solid rgba(163,92,122,.42)}
+  td a.mail{border-bottom:1px solid rgba(133,121,189,.42)}
   td a.mail:hover{color:var(--neon-deep)}
   /* status reads by weight rather than by hue — there is only one accent */
   .chip{display:inline-block;padding:3px 10px;border-radius:100px;font-size:11px;letter-spacing:.1em;
     text-transform:uppercase;font-weight:600;border:1px solid var(--line);color:var(--muted)}
   .chip.new{background:var(--neon);border-color:var(--neon);color:var(--white)}
-  /* 11px on a tinted background — the accent proper is 3.61:1 there */
-  .chip.contacted{background:rgba(163,92,122,.16);border-color:rgba(163,92,122,.5);color:var(--neon-deep)}
-  .chip.qualified{background:transparent;border-color:rgba(163,92,122,.5);color:var(--neon-deep)}
+  /* 11px on a tinted background — the accent proper is 1.9:1 there, gone */
+  .chip.contacted{background:rgba(133,121,189,.16);border-color:rgba(133,121,189,.5);color:var(--neon-deep)}
+  .chip.qualified{background:transparent;border-color:rgba(133,121,189,.5);color:var(--neon-deep)}
   .chip.closed{opacity:.5}
   .note{max-width:44ch;color:var(--muted);font-size:13.2px}
   .status-form{display:flex;gap:6px;align-items:center}
@@ -79,9 +79,9 @@ function sparkline(daily) {
   const points = values.map((value, index) => `${(index * step).toFixed(2)},${(28 - (value / peak) * 26).toFixed(2)}`);
 
   return html`<svg viewBox="0 0 100 30" preserveAspectRatio="none" aria-hidden="true">
-    <polyline points="${raw(points.join(' '))}" fill="none" stroke="#A35C7A" stroke-width="1.6"
+    <polyline points="${raw(points.join(' '))}" fill="none" stroke="#8579BD" stroke-width="1.6"
       stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
-    <polyline points="${raw(`0,30 ${points.join(' ')} 100,30`)}" fill="rgba(163,92,122,.14)" stroke="none"/>
+    <polyline points="${raw(`0,30 ${points.join(' ')} 100,30`)}" fill="rgba(133,121,189,.14)" stroke="none"/>
   </svg>`;
 }
 

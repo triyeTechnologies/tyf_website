@@ -5,7 +5,9 @@ import { layout } from './layout.js';
 const STYLES = `
   .err{min-height:100vh;display:grid;place-items:center;text-align:center;padding:40px 20px}
   .err .code{font-family:var(--disp);font-weight:800;font-size:clamp(88px,20vw,180px);line-height:.86;
-    letter-spacing:-.06em;color:var(--neon);text-shadow:0 0 60px var(--neon-glow)}
+    /* the readable tint, not the fill: the accent is 2.02:1 on this
+       background, which no size rescues */
+    letter-spacing:-.06em;color:var(--neon-deep);text-shadow:0 0 60px var(--neon-glow)}
   .err h1{font-size:clamp(26px,4vw,40px);margin:18px 0 12px}
   .err p{color:var(--muted);max-width:46ch;margin:0 auto}
   .err .actions{display:flex;gap:10px;justify-content:center;margin-top:28px;flex-wrap:wrap}

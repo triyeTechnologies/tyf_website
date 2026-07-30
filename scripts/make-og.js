@@ -36,7 +36,11 @@ const ANCIENT_UA =
 const FAMILIES = { display: 'Bricolage+Grotesque:800', body: 'Inter:400' };
 
 const BLACK = '#0A0A0C';
-const NEON = '#A35C7A';
+const NEON = '#443199';
+// Everything accent-coloured on this card sits on the near-black field, where
+// #443199 is 2.02:1 — invisible. Marks use the lightened tint; the fill colour
+// proper only appears in the haze behind them.
+const NEON_SOFT = '#8579BD';
 const WHITE = '#FFFFFF';
 const MUTED = 'rgba(255,255,255,0.62)';
 
@@ -85,21 +89,21 @@ const card = el('div', {
   el('div', {
     style: {
       position: 'absolute', top: '-260px', left: '-160px', width: '760px', height: '760px',
-      borderRadius: '9999px', background: 'radial-gradient(circle closest-side, rgba(163,92,122,0.20), rgba(163,92,122,0))',
+      borderRadius: '9999px', background: 'radial-gradient(circle closest-side, rgba(133,121,189,0.20), rgba(133,121,189,0))',
       display: 'flex',
     },
   }),
   el('div', {
     style: {
       position: 'absolute', bottom: '-320px', right: '-180px', width: '720px', height: '720px',
-      borderRadius: '9999px', background: 'radial-gradient(circle closest-side, rgba(163,92,122,0.13), rgba(163,92,122,0))',
+      borderRadius: '9999px', background: 'radial-gradient(circle closest-side, rgba(133,121,189,0.13), rgba(133,121,189,0))',
       display: 'flex',
     },
   }),
 
   // wordmark
   el('div', { style: { display: 'flex', alignItems: 'center', gap: '16px' } },
-    el('div', { style: { width: '22px', height: '22px', borderRadius: '9999px', backgroundColor: NEON, display: 'flex' } }),
+    el('div', { style: { width: '22px', height: '22px', borderRadius: '9999px', backgroundColor: NEON_SOFT, display: 'flex' } }),
     el('div', { style: { fontFamily: 'Bricolage Grotesque', fontSize: '38px', fontWeight: 800, color: WHITE, letterSpacing: '-0.04em' } }, 'TyF'),
     el('div', { style: { fontSize: '19px', color: MUTED, letterSpacing: '0.22em', marginLeft: '6px' } }, 'TRY YOUR FIT'),
   ),
@@ -112,7 +116,7 @@ const card = el('div', {
       },
     },
       el('div', {}, 'Wear it before'),
-      el('div', {}, el('span', { style: { color: NEON } }, 'you buy it.')),
+      el('div', {}, el('span', { style: { color: NEON_SOFT } }, 'you buy it.')),
     ),
     el('div', { style: { fontSize: '31px', color: MUTED, marginTop: '26px', display: 'flex' } },
       'Two photos in. You, wearing it, out — in about ten seconds.'),
@@ -122,8 +126,8 @@ const card = el('div', {
     el('div', { style: { display: 'flex', alignItems: 'center', gap: '14px' } },
       el('div', {
         style: {
-          border: `1px solid ${NEON}`, borderRadius: '9999px', padding: '11px 24px',
-          fontSize: '21px', color: NEON, display: 'flex',
+          border: `1px solid ${NEON_SOFT}`, borderRadius: '9999px', padding: '11px 24px',
+          fontSize: '21px', color: NEON_SOFT, display: 'flex',
         },
       }, 'Virtual try-on'),
       el('div', { style: { fontSize: '21px', color: MUTED, display: 'flex' } }, 'Built in India'),
