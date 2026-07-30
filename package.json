@@ -21,6 +21,7 @@
     "export": "node scripts/export-csv.js",
     "token": "node scripts/make-token.js",
     "csp": "node scripts/csp-hashes.js --check",
+    "contrast": "node scripts/contrast.js",
     "og": "node scripts/make-og.js"
   },
   "dependencies": {
