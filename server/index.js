@@ -29,7 +29,7 @@ if (env.IS_DEV) {
     await runMigrations();
   } catch (error) {
     logger.error('could not migrate the database:', error.message);
-    logger.error('Is DATABASE_URL set in .env?');
+    logger.error('Is the local database running? Start it with: npm run db:up');
     process.exit(1);
   }
 }

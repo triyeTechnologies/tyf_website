@@ -29,8 +29,9 @@ export function getPool() {
 
   if (!env.DATABASE_URL) {
     throw new Error(
-      'DATABASE_URL is not set. Copy the Supabase transaction-pooler ' +
-        'connection string into .env (or the Vercel project settings).',
+      'DATABASE_URL is not set. Locally, start the docker-compose Postgres with ' +
+        '`npm run db:up` and copy .env.example to .env; in production, set the ' +
+        'Supabase transaction-pooler connection string in the Vercel project settings.',
     );
   }
 

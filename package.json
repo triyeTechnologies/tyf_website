@@ -10,6 +10,11 @@
   "scripts": {
     "start": "node server/index.js",
     "dev": "node --watch server/index.js",
+    "db:up": "docker compose up -d --wait",
+    "db:down": "docker compose down",
+    "db:destroy": "docker compose down --volumes",
+    "db:logs": "docker compose logs -f postgres",
+    "db:psql": "docker compose exec postgres psql -U tyf -d tyf",
     "db:migrate": "node scripts/migrate.js",
     "db:reset": "node scripts/reset-db.js",
     "db:seed": "node scripts/seed-db.js",

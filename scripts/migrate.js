@@ -14,8 +14,8 @@ import { env } from '../server/config/env.js';
 
 if (!env.DATABASE_URL) {
   console.error('DATABASE_URL is not set.');
-  console.error('Put the Supabase transaction-pooler connection string in .env,');
-  console.error('or run this with the Vercel environment: vercel env pull .env');
+  console.error('  local:      npm run db:up   (then copy .env.example to .env)');
+  console.error('  production: vercel env pull .env');
   process.exit(1);
 }
 

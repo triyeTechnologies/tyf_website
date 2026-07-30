@@ -1,0 +1,45 @@
+# Local development database.
+#
+#   npm run db:up      start it (waits until it actually accepts connections)
+#   npm run db:down    stop it, keeping the data
+#   npm run db:psql    open a psql shell inside the container
+#
+# Production is Supabase; this is the same Postgres major version, so migrations
+# that work here work there. Nothing in this file is used by a deployment.
+
+services:
+  postgres:
+    # Supabase runs Postgres 17. Matching it locally means a migration cannot
+    # pass here and fail there on syntax the older server does not know.
+    image: postgres:17-alpine
+    container_name: tyf-postgres
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_USER: tyf
+      POSTGRES_PASSWORD: tyf
+      POSTGRES_DB: tyf
+      # Slightly faster startup and smaller images — we never need other locales.
+      POSTGRES_INITDB_ARGS: '--encoding=UTF8 --locale=C'
+
+    ports:
+      # 5433 on the host, because a machine-wide Postgres install already owns
+      # 5432 on most dev boxes. Override with POSTGRES_PORT if 5433 is taken too.
+      - '${POSTGRES_PORT:-5433}:5432'
+
+    volumes:
+      # Named volume, not a bind mount: bind-mounting Postgres data on Windows
+      # or macOS is both slow and prone to permission errors.
+      - tyf-pgdata:/var/lib/postgresql/data
+
+    healthcheck:
+      # `docker compose up --wait` blocks on this, so `npm run db:up` returns
+      # only once the server is genuinely ready — not merely once it has booted.
+      test: ['CMD-SHELL', 'pg_isready -U tyf -d tyf']
+      interval: 2s
+      timeout: 3s
+      retries: 30
+      start_period: 5s
+
+volumes:
+  tyf-pgdata:

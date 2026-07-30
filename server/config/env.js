@@ -62,6 +62,25 @@ const ADMIN_TOKEN = configuredToken || crypto.randomBytes(24).toString('base64ur
 // Used to hash IPs before storage — we keep abuse signal without keeping PII.
 const IP_SALT = str('IP_SALT', crypto.createHash('sha256').update(ADMIN_TOKEN).digest('hex'));
 
+const DATABASE_URL = str('DATABASE_URL') || str('POSTGRES_URL');
+
+// A managed Postgres always speaks TLS; the one in docker-compose.yml never
+// does. Deciding from the host means neither .env needs a DATABASE_SSL line —
+// and a local database can no longer fail with a confusing TLS error.
+// `postgres` is the compose service name, for when the app itself runs in Docker.
+const LOCAL_DB_HOSTS = new Set(['localhost', '127.0.0.1', '::1', 'host.docker.internal', 'postgres']);
+
+function databaseHostname(url) {
+  try {
+    // URL wraps IPv6 literals in brackets; strip them to match the set above.
+    return new URL(url).hostname.replace(/^\[|\]$/g, '');
+  } catch {
+    return '';
+  }
+}
+
+const DATABASE_IS_LOCAL = LOCAL_DB_HOSTS.has(databaseHostname(DATABASE_URL));
+
 export const env = Object.freeze({
   NODE_ENV,
   IS_PROD,
@@ -78,13 +97,14 @@ export const env = Object.freeze({
   ROOT_DIR,
   PUBLIC_DIR: path.join(ROOT_DIR, 'public'),
 
-  /* database — Supabase Postgres.
+  /* database — Supabase Postgres in production, docker-compose locally.
      Use the *transaction pooler* connection string (port 6543), not the
      direct one: serverless instances open and drop connections constantly,
      and the direct port runs out of them fast. */
-  DATABASE_URL: str('DATABASE_URL') || str('POSTGRES_URL'),
+  DATABASE_URL,
+  DATABASE_IS_LOCAL,
   DATABASE_POOL_MAX: int('DATABASE_POOL_MAX', IS_SERVERLESS ? 1 : 10),
-  DATABASE_SSL: bool('DATABASE_SSL', true),
+  DATABASE_SSL: bool('DATABASE_SSL', !DATABASE_IS_LOCAL),
 
   /* distributed rate limiting — optional.
      Without these the limiter falls back to per-instance memory, which is

@@ -14,9 +14,10 @@ generated: what you edit is what ships.
 
 ```bash
 npm install
-cp .env.example .env      # then fill in DATABASE_URL and ADMIN_TOKEN
-npm run db:migrate        # creates the tables
-npm start                 # http://localhost:3000
+cp .env.example .env       # works as-is for local development
+npm run db:up              # Postgres in Docker
+npm run db:migrate         # creates the tables
+npm start                  # http://localhost:3000
 ```
 
 Or with reload on save:
@@ -25,13 +26,41 @@ Or with reload on save:
 npm run dev
 ```
 
-`DATABASE_URL` is the Supabase **transaction pooler** connection string (port
-6543 — see `.env.example` for why). `npm run token` prints a fresh
-`ADMIN_TOKEN=` line to paste in; without one the server generates a throwaway
-token on every restart, which is exactly as annoying as it sounds.
+Requires **Node 20.9+** and Docker. Runtime dependencies: Express, `pg`, and
+the two Upstash clients.
 
-Requires **Node 20.9+**. Runtime dependencies: Express, `pg`, and the two
-Upstash clients.
+`npm run token` prints a fresh `ADMIN_TOKEN=` line to paste into `.env`;
+without one the server generates a throwaway token on every restart, which is
+exactly as annoying as it sounds.
+
+### The local database
+
+`docker-compose.yml` runs the **same Postgres major version as Supabase**, so a
+migration that passes locally passes in production. It is only ever a
+development database — no deployment reads that file.
+
+```bash
+npm run db:up        # start; returns once it really accepts connections
+npm run db:migrate   # apply pending migrations
+npm run db:seed      # 60 fake signups + 3 pilot requests to look at
+npm run db:psql      # a psql shell inside the container
+npm run db:down      # stop, keeping the data
+npm run db:destroy   # stop and delete the volume — a clean slate
+```
+
+Two details that save an afternoon:
+
+- **Host port 5433, not 5432.** A machine-wide Postgres install usually already
+  owns 5432, and the collision surfaces as an authentication error against the
+  *wrong* server rather than as a connection failure. Set `POSTGRES_PORT` if
+  5433 is taken too.
+- **Don't set `DATABASE_SSL`.** It defaults to off for `localhost` and on for
+  everything else, so the same `.env` shape works in both places. The container
+  speaks no TLS; a managed database always does.
+
+Prefer to point at Supabase instead? Put its **transaction pooler** connection
+string (port 6543 — see `.env.example` for why) in `DATABASE_URL` and skip
+`db:up` entirely. Nothing else changes.
 
 ---
 
@@ -61,6 +90,7 @@ server/
 
 scripts/                db:migrate, db:reset, db:seed, export, token
 archive/                the previous single-file version, kept for reference
+docker-compose.yml      the local Postgres — development only
 vercel.json             static/function split and cache headers
 ```
 
