@@ -20,7 +20,7 @@ const STYLES = `
     background:var(--glass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
   .tabs a{padding:7px 16px;border-radius:100px;font-family:var(--disp);font-weight:600;font-size:13.5px;
     transition:background .2s var(--e),color .2s var(--e)}
-  .tabs a.on{background:var(--neon);color:var(--white);box-shadow:0 6px 18px -6px var(--neon-glow)}
+  .tabs a.on{background:var(--neon);color:var(--black);box-shadow:0 6px 18px -6px var(--neon-glow)}
   .tabs a:not(.on):hover{background:rgba(255,255,255,.08)}
   form.search{display:flex;gap:8px;margin-left:auto}
   form.search input{min-width:240px}
@@ -36,15 +36,15 @@ const STYLES = `
   tbody tr{transition:background .18s}
   tbody tr:hover{background:rgba(255,255,255,.04)}
   td.num{color:var(--muted);font-family:ui-monospace,Menlo,monospace;font-size:12.5px;width:1%}
-  td a.mail{border-bottom:1px solid rgba(133,121,189,.42)}
+  td a.mail{border-bottom:1px solid rgba(233,163,25,.42)}
   td a.mail:hover{color:var(--neon-deep)}
   /* status reads by weight rather than by hue — there is only one accent */
   .chip{display:inline-block;padding:3px 10px;border-radius:100px;font-size:11px;letter-spacing:.1em;
     text-transform:uppercase;font-weight:600;border:1px solid var(--line);color:var(--muted)}
-  .chip.new{background:var(--neon);border-color:var(--neon);color:var(--white)}
-  /* 11px on a tinted background — the accent proper is 1.9:1 there, gone */
-  .chip.contacted{background:rgba(133,121,189,.16);border-color:rgba(133,121,189,.5);color:var(--neon-deep)}
-  .chip.qualified{background:transparent;border-color:rgba(133,121,189,.5);color:var(--neon-deep)}
+  .chip.new{background:var(--neon);border-color:var(--neon);color:var(--black)}
+  /* 11px, so the deeper cut rather than the full accent glaring at that size */
+  .chip.contacted{background:rgba(233,163,25,.16);border-color:rgba(233,163,25,.5);color:var(--neon-deep)}
+  .chip.qualified{background:transparent;border-color:rgba(233,163,25,.5);color:var(--neon-deep)}
   .chip.closed{opacity:.5}
   .note{max-width:44ch;color:var(--muted);font-size:13.2px}
   .status-form{display:flex;gap:6px;align-items:center}
@@ -79,9 +79,9 @@ function sparkline(daily) {
   const points = values.map((value, index) => `${(index * step).toFixed(2)},${(28 - (value / peak) * 26).toFixed(2)}`);
 
   return html`<svg viewBox="0 0 100 30" preserveAspectRatio="none" aria-hidden="true">
-    <polyline points="${raw(points.join(' '))}" fill="none" stroke="#8579BD" stroke-width="1.6"
+    <polyline points="${raw(points.join(' '))}" fill="none" stroke="#C68B15" stroke-width="1.6"
       stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
-    <polyline points="${raw(`0,30 ${points.join(' ')} 100,30`)}" fill="rgba(133,121,189,.14)" stroke="none"/>
+    <polyline points="${raw(`0,30 ${points.join(' ')} 100,30`)}" fill="rgba(233,163,25,.14)" stroke="none"/>
   </svg>`;
 }
 

@@ -36,11 +36,11 @@ const ANCIENT_UA =
 const FAMILIES = { display: 'Bricolage+Grotesque:800', body: 'Inter:400' };
 
 const BLACK = '#0A0A0C';
-const NEON = '#443199';
-// Everything accent-coloured on this card sits on the near-black field, where
-// #443199 is 2.02:1 — invisible. Marks use the lightened tint; the fill colour
-// proper only appears in the haze behind them.
-const NEON_SOFT = '#8579BD';
+const NEON = '#E9A319';
+// A deeper cut of the accent. #E9A319 reads at 9.15:1 on this field, so this
+// is about weight rather than legibility: the marks sit a step back from the
+// haze instead of competing with the headline.
+const NEON_SOFT = '#C68B15';
 const WHITE = '#FFFFFF';
 const MUTED = 'rgba(255,255,255,0.62)';
 
@@ -89,14 +89,14 @@ const card = el('div', {
   el('div', {
     style: {
       position: 'absolute', top: '-260px', left: '-160px', width: '760px', height: '760px',
-      borderRadius: '9999px', background: 'radial-gradient(circle closest-side, rgba(133,121,189,0.20), rgba(133,121,189,0))',
+      borderRadius: '9999px', background: 'radial-gradient(circle closest-side, rgba(233,163,25,0.20), rgba(233,163,25,0))',
       display: 'flex',
     },
   }),
   el('div', {
     style: {
       position: 'absolute', bottom: '-320px', right: '-180px', width: '720px', height: '720px',
-      borderRadius: '9999px', background: 'radial-gradient(circle closest-side, rgba(133,121,189,0.13), rgba(133,121,189,0))',
+      borderRadius: '9999px', background: 'radial-gradient(circle closest-side, rgba(233,163,25,0.13), rgba(233,163,25,0))',
       display: 'flex',
     },
   }),

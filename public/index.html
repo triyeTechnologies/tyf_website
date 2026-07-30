@@ -27,7 +27,7 @@
 <meta property="og:image:alt" content="Try your Fit — wear it before you buy it. Two photos in, you wearing it out.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://triyefit.vercel.app/images/og.png">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230A0A0C'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23443199'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230A0A0C'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23E9A319'/%3E%3C/svg%3E">
 <!-- Fonts are served from this origin (see the @font-face block below), so
      there is nothing to preconnect to. These two carry the characters almost
      every visitor needs; the latin-ext pair loads only if a page actually uses
@@ -82,7 +82,7 @@
   Triye Technologies · Bengaluru
 
   THREE COLOURS, NOTHING ELSE
-    black #0A0A0C · white #FFFFFF · neon #443199
+    black #0A0A0C · white #FFFFFF · neon #E9A319
     Sections alternate black-on-white and white-on-black; neon is the only
     accent and is never used for body text. Surfaces are frosted glass —
     translucent, blurred, hairline-bordered, lit from above.
@@ -161,20 +161,21 @@
     /* ── the palette, in full ── */
     --black:#0A0A0C;
     --white:#FFFFFF;
-    --neon:#443199;
+    --neon:#E9A319;
 
     /* ── mixes of the above, no new hues ── */
-    /* The accent LIGHTENED — the "deep" in the name is left over from the
-       green this palette started as.
+    /* The accent DARKENED, which is what the name meant originally.
 
-       This one carries more weight than a tint usually would. #443199 on the
-       near-black page is 2.02:1: not dim, invisible. Below the 3:1 that even
-       large text and UI components need, so the accent cannot be a letter, a
-       hairline or a stroke here — only a fill, with white on it at 9.79:1.
-       Everything meant to be SEEN against the page uses this instead: the
-       same hue mixed 35% with white, 5.15:1. */
-    --neon-deep:#8579BD;
-    --neon-glow:rgba(133,121,189,.38);
+       #E9A319 is bright — 9.15:1 as text on the near-black page — so unlike
+       the two dark accents this palette passed through, it needs no rescue
+       tint to be legible. This is the same hue at 85% brightness, 6.69:1: a
+       deeper cut for marks that would glare at full strength, which is the
+       job this token was created to do.
+
+       The brightness also decides what sits ON the accent: black is 9.15:1
+       and white is 2.16:1, so every fill takes black text. */
+    --neon-deep:#C68B15;
+    --neon-glow:rgba(233,163,25,.38);
     --grey:#6E6E77;
 
     /* ── semantic surface set — the light band is the default ── */
@@ -238,7 +239,7 @@
   a{color:inherit;text-decoration:none}
   button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
   input,textarea,select{font:inherit}
-  ::selection{background:var(--neon);color:var(--white)}
+  ::selection{background:var(--neon);color:var(--black)}
 
   :focus-visible{outline:2px solid var(--neon);outline-offset:3px;border-radius:4px}
 
@@ -289,8 +290,8 @@
   .b-dark::before{
     content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
     background:
-      radial-gradient(62% 48% at 12% -4%,rgba(133,121,189,.12),transparent 70%),
-      radial-gradient(48% 42% at 92% 104%,rgba(133,121,189,.08),transparent 70%);
+      radial-gradient(62% 48% at 12% -4%,rgba(233,163,25,.12),transparent 70%),
+      radial-gradient(48% 42% at 92% 104%,rgba(233,163,25,.08),transparent 70%);
   }
   .b-dark > *{position:relative;z-index:1}
 
@@ -326,7 +327,7 @@
   .kicker{
     font-family:var(--disp);font-weight:600;font-size:12px;letter-spacing:.22em;text-transform:uppercase;
     display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:100px;
-    background:var(--neon);color:var(--white);
+    background:var(--neon);color:var(--black);
   }
   .kicker::before{
     content:"";width:6px;height:6px;border-radius:50%;background:currentColor;
@@ -353,7 +354,7 @@
   .btn:active{transform:translateY(-1px) scale(.985)}
 
   /* primary is always neon — it is the one thing the eye should find */
-  .b1{background:var(--neon);color:var(--white);box-shadow:0 0 0 0 var(--neon-glow)}
+  .b1{background:var(--neon);color:var(--black);box-shadow:0 0 0 0 var(--neon-glow)}
   .b1:hover{box-shadow:0 12px 34px -6px var(--neon-glow)}
 
   /* secondary is glass, so it belongs to whichever band it sits on */
@@ -375,8 +376,8 @@
   .slot::before{
     content:"";position:absolute;inset:0;z-index:1;
     background:
-      repeating-linear-gradient(45deg,rgba(133,121,189,.09) 0 10px,transparent 10px 24px),
-      radial-gradient(70% 60% at 20% 10%,rgba(133,121,189,.14),transparent 70%);
+      repeating-linear-gradient(45deg,rgba(233,163,25,.09) 0 10px,transparent 10px 24px),
+      radial-gradient(70% 60% at 20% 10%,rgba(233,163,25,.14),transparent 70%);
     transition:opacity var(--t-mid) var(--e);
   }
   .slot::after{
@@ -436,16 +437,16 @@
   /* variants keep the placeholders from looking mass-produced */
   .slot.v2{background:linear-gradient(200deg,#16161B,#0A0A0C 60%,#1E1E24)}
   .slot.v2::before{background:
-    repeating-linear-gradient(-45deg,rgba(133,121,189,.08) 0 10px,transparent 10px 24px),
-    radial-gradient(60% 60% at 80% 15%,rgba(133,121,189,.16),transparent 70%)}
+    repeating-linear-gradient(-45deg,rgba(233,163,25,.08) 0 10px,transparent 10px 24px),
+    radial-gradient(60% 60% at 80% 15%,rgba(233,163,25,.16),transparent 70%)}
   .slot.v3{background:linear-gradient(115deg,#0A0A0C,#1D1D23 55%,#0F0F13)}
   .slot.v3::before{background:
-    repeating-linear-gradient(90deg,rgba(133,121,189,.07) 0 8px,transparent 8px 26px),
-    radial-gradient(70% 50% at 50% 100%,rgba(133,121,189,.15),transparent 70%)}
+    repeating-linear-gradient(90deg,rgba(233,163,25,.07) 0 8px,transparent 8px 26px),
+    radial-gradient(70% 50% at 50% 100%,rgba(233,163,25,.15),transparent 70%)}
   .slot.v4{background:linear-gradient(160deg,#121216,#0A0A0C 50%,#191920)}
   .slot.v4::before{background:
-    repeating-linear-gradient(0deg,rgba(133,121,189,.07) 0 8px,transparent 8px 26px),
-    radial-gradient(60% 60% at 15% 90%,rgba(133,121,189,.16),transparent 70%)}
+    repeating-linear-gradient(0deg,rgba(233,163,25,.07) 0 8px,transparent 8px 26px),
+    radial-gradient(60% 60% at 15% 90%,rgba(233,163,25,.16),transparent 70%)}
 
   /* ── tiles ──────────────────────────────────────────────────────────── */
   .tile{
@@ -496,7 +497,7 @@
     flex:none;width:22px;height:22px;border-radius:50%;background:var(--neon);margin-top:2px;
     display:grid;place-items:center;transition:transform var(--t-fast) var(--e-spring);
   }
-  .fl li:hover .dot{transform:scale(1.18);box-shadow:0 0 0 6px rgba(133,121,189,.16)}
+  .fl li:hover .dot{transform:scale(1.18);box-shadow:0 0 0 6px rgba(233,163,25,.16)}
   .dot::after{
     content:"";width:7px;height:4px;border-left:2px solid var(--black);border-bottom:2px solid var(--black);
     transform:rotate(-45deg) translate(1px,-1px);
@@ -516,7 +517,7 @@
   }
   .field textarea{resize:vertical;min-height:96px;border-radius:14px}
   .field input:focus,.field select:focus,.field textarea:focus{
-    border-color:var(--neon-deep);box-shadow:0 0 0 4px rgba(133,121,189,.2);
+    border-color:var(--neon-deep);box-shadow:0 0 0 4px rgba(233,163,25,.2);
   }
   .field.has-error input,.field.has-error select,.field.has-error textarea{border-color:var(--black)}
   .field .msg{font-size:12.6px;color:var(--black);font-weight:500;display:none}
@@ -543,7 +544,7 @@
   .toast.in{opacity:1;transform:none}
   .toast .ic{
     flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;
-    font-size:12px;font-weight:700;color:var(--white);background:var(--neon);
+    font-size:12px;font-weight:700;color:var(--black);background:var(--neon);
   }
   .toast.err .ic{background:var(--white)}
   .toast.info .ic{background:rgba(255,255,255,.85)}
@@ -596,7 +597,7 @@
   .triptych img.gar{object-fit:contain;padding:6%}
   .triptych .res img{
     border-color:var(--neon-deep);
-    box-shadow:0 0 0 2px rgba(133,121,189,.32),0 20px 44px -22px var(--neon-glow);
+    box-shadow:0 0 0 2px rgba(233,163,25,.32),0 20px 44px -22px var(--neon-glow);
   }
   .triptych figcaption{
     margin-top:10px;text-align:center;font-family:var(--disp);font-weight:600;font-size:10.5px;
@@ -628,7 +629,7 @@
   .v-btn{
     position:absolute;top:50%;left:50%;translate:-50% -50%;z-index:2;
     width:clamp(64px,7vw,86px);height:clamp(64px,7vw,86px);border-radius:50%;
-    display:grid;place-items:center;background:var(--neon);color:var(--white);
+    display:grid;place-items:center;background:var(--neon);color:var(--black);
     box-shadow:0 18px 50px -14px var(--neon-glow);
     transition:transform var(--t-mid) var(--e-spring),box-shadow var(--t-mid) var(--e);
   }
@@ -669,7 +670,7 @@
       background var(--t-fast),color var(--t-fast);
   }
   .to-top.show{opacity:1;transform:none;pointer-events:auto}
-  .to-top:hover{background:var(--neon);color:var(--white);border-color:var(--neon)}
+  .to-top:hover{background:var(--neon);color:var(--black);border-color:var(--neon)}
 
   /* ── preloader ──────────────────────────────────────────────────────────
      Shown only when scripting is available, and it dismisses itself after
@@ -768,9 +769,9 @@
   /* ── hero ───────────────────────────────────────────────────────────── */
   .hero{padding:132px 0 0;overflow:hidden}
   .blob{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0}
-  .blob1{width:520px;height:520px;background:rgba(133,121,189,.5);top:-140px;left:-120px}
+  .blob1{width:520px;height:520px;background:rgba(233,163,25,.5);top:-140px;left:-120px}
   .blob2{width:430px;height:430px;background:rgba(10,10,12,.14);top:180px;right:-110px}
-  .blob3{width:340px;height:340px;background:rgba(133,121,189,.38);bottom:-40px;left:38%}
+  .blob3{width:340px;height:340px;background:rgba(233,163,25,.38);bottom:-40px;left:38%}
   .blob i{display:block;width:100%;height:100%;border-radius:50%;background:inherit;animation:drift 21s var(--e-soft) infinite}
   .blob2 i{animation-duration:26s;animation-direction:reverse}
   .blob3 i{animation-duration:31s}
@@ -841,7 +842,7 @@
   }
   .grip{
     position:absolute;top:50%;left:50%;translate:-50% -50%;width:56px;height:56px;border-radius:50%;
-    background:rgba(133,121,189,.9);color:var(--black);
+    background:rgba(233,163,25,.9);color:var(--black);
     backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
     border:1px solid rgba(255,255,255,.5);display:grid;place-items:center;
     box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 10px 30px -8px var(--neon-glow);
@@ -856,7 +857,7 @@
     border:1px solid rgba(255,255,255,.24);
   }
   .pill-a{left:16px;background:rgba(255,255,255,.18);color:var(--white)}
-  .pill-b{right:16px;background:rgba(133,121,189,.9);color:var(--black);border-color:rgba(255,255,255,.5)}
+  .pill-b{right:16px;background:rgba(233,163,25,.9);color:var(--black);border-color:rgba(255,255,255,.5)}
 
   /* The photographs are the point, so the stat cards stay compact and sit
      centred beside them rather than stretching to match their height. */
@@ -878,7 +879,7 @@
     letter-spacing:-.05em;line-height:1;
   }
   /* one card is the loud one, and it is the price */
-  .rail .card.accent{background:var(--neon);border-color:var(--neon);color:var(--white)}
+  .rail .card.accent{background:var(--neon);border-color:var(--neon);color:var(--black)}
   .rail .card span{
     font-family:var(--disp);font-weight:600;font-size:11.5px;letter-spacing:.15em;
     text-transform:uppercase;opacity:.66;
@@ -936,7 +937,7 @@
     padding:5px 9px;border-radius:7px;background:rgba(10,10,12,.6);color:var(--white);
     backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2);
   }
-  .try-frame .tag.neon{background:var(--neon);color:var(--white);border-color:transparent}
+  .try-frame .tag.neon{background:var(--neon);color:var(--black);border-color:transparent}
 
   /* the output frame starts empty and stays empty until you ask for it */
   .try-out{background:linear-gradient(150deg,#16161B,#0A0A0C)}
@@ -973,7 +974,7 @@
   .pick img{width:100%;height:100%;object-fit:cover}
   .pick.gar img{object-fit:contain;padding:2px}
   .pick:hover{opacity:.85;transform:translateY(-2px)}
-  .pick.on{opacity:1;border-color:var(--neon-deep);box-shadow:0 0 0 2px rgba(133,121,189,.32)}
+  .pick.on{opacity:1;border-color:var(--neon-deep);box-shadow:0 0 0 2px rgba(233,163,25,.32)}
 
   .try-go{width:100%;justify-content:center;margin:12px 0 2px}
   .step .cap{margin-top:14px}
@@ -992,7 +993,7 @@
   .gal .slot{aspect-ratio:3/4}
   .stamp{
     position:absolute;z-index:5;top:12px;left:12px;font-family:var(--disp);font-weight:800;font-size:10.5px;
-    letter-spacing:.14em;background:var(--neon);color:var(--white);padding:6px 10px;border-radius:8px;
+    letter-spacing:.14em;background:var(--neon);color:var(--black);padding:6px 10px;border-radius:8px;
     box-shadow:0 6px 18px -6px var(--neon-glow);
   }
 
@@ -1049,8 +1050,8 @@
   .flow .f-in,.flow .f-out{animation:flowLit 5s linear infinite}
   .flow .f-in.d2{animation-name:flowLit2}
   .flow .f-out{animation-name:flowLitOut}
-  .flow .f-out rect{fill:rgba(133,121,189,.07);stroke:rgba(133,121,189,.42)}
-  .flow .f-eng rect{fill:rgba(255,255,255,.06);stroke:rgba(133,121,189,.34)}
+  .flow .f-out rect{fill:rgba(233,163,25,.07);stroke:rgba(233,163,25,.42)}
+  .flow .f-eng rect{fill:rgba(255,255,255,.06);stroke:rgba(233,163,25,.34)}
 
   /* wires, and the packet that runs along them */
   .flow .wire{fill:none;stroke:rgba(255,255,255,.16);stroke-width:1.5}
@@ -1134,7 +1135,7 @@
   }
   .gm:hover{transform:translateY(-4px);border-color:var(--line-strong)}
   .gm.on{
-    border-color:var(--neon-deep);background:rgba(133,121,189,.12);
+    border-color:var(--neon-deep);background:rgba(233,163,25,.12);
     box-shadow:inset 0 1px 0 var(--glass-hi),0 14px 34px -14px var(--neon-glow);
   }
   /* the garment itself: a real image if one exists, the drawing otherwise */
@@ -1207,7 +1208,7 @@
     border-radius:100px;background:rgba(10,10,12,.08);color:var(--fg);
     align-self:flex-start;margin-bottom:18px;
   }
-  .pc.star .tag{background:var(--neon);color:var(--white);box-shadow:0 6px 18px -6px var(--neon-glow)}
+  .pc.star .tag{background:var(--neon);color:var(--black);box-shadow:0 6px 18px -6px var(--neon-glow)}
   .pc .amt{
     font-family:var(--disp);font-weight:800;font-size:clamp(40px,5.4vw,58px);letter-spacing:-.06em;
     margin:16px 0 4px;line-height:1;
@@ -1299,8 +1300,8 @@
   .cta::before{
     content:"";position:absolute;inset:-40%;pointer-events:none;
     background:
-      radial-gradient(circle at 30% 30%,rgba(133,121,189,.3),transparent 52%),
-      radial-gradient(circle at 78% 76%,rgba(133,121,189,.16),transparent 55%);
+      radial-gradient(circle at 30% 30%,rgba(233,163,25,.3),transparent 52%),
+      radial-gradient(circle at 78% 76%,rgba(233,163,25,.16),transparent 55%);
     animation:sheen 14s var(--e-soft) infinite alternate;
   }
   .cta > *{position:relative;z-index:1}
@@ -1315,7 +1316,7 @@
     transition:box-shadow var(--t-fast) var(--e),border-color var(--t-fast);
   }
   .form input::placeholder{color:rgba(255,255,255,.5)}
-  .form input:focus{border-color:var(--neon-deep);box-shadow:0 0 0 4px rgba(133,121,189,.22)}
+  .form input:focus{border-color:var(--neon-deep);box-shadow:0 0 0 4px rgba(233,163,25,.22)}
   .form.has-error input{border-color:var(--white);box-shadow:0 0 0 4px rgba(255,255,255,.22)}
   .done{
     display:none;margin:32px auto 0;max-width:540px;padding:22px;border-radius:var(--r-lg);
@@ -1545,7 +1546,7 @@
         <svg viewBox="0 0 120 120" aria-hidden="true">
           <defs><path id="circ" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"/></defs>
           <circle cx="60" cy="60" r="58" fill="#0A0A0C"/>
-          <text font-family="Bricolage Grotesque,sans-serif" font-size="12.5" font-weight="600" fill="#443199" letter-spacing="3.4">
+          <text font-family="Bricolage Grotesque,sans-serif" font-size="12.5" font-weight="600" fill="#E9A319" letter-spacing="3.4">
             <textPath href="#circ">· TWO PHOTOS · TEN SECONDS · ZERO QUEUES </textPath>
           </text>
         </svg>

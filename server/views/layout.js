@@ -22,12 +22,12 @@ export const THEME = raw(`
 
   :root{
     /* the same three colours as the public site */
-    --black:#0A0A0C; --white:#FFFFFF; --neon:#443199;
-    /* Everything drawn ON the page rather than filled WITH it: #443199 is
-       2.02:1 here, which is invisible rather than merely dim. This is the
-       same hue mixed 35% with white, at 5.15:1. */
-    --neon-deep:#8579BD;
-    --neon-glow:rgba(133,121,189,.34);
+    --black:#0A0A0C; --white:#FFFFFF; --neon:#E9A319;
+    /* A deeper cut of the accent for marks that would glare at full
+       brightness. #E9A319 reads at 9.15:1 here and needs no help; this is
+       the same hue at 85%, 6.69:1. Fills take black text, not white. */
+    --neon-deep:#C68B15;
+    --neon-glow:rgba(233,163,25,.34);
     --line:rgba(255,255,255,.14); --muted:rgba(255,255,255,.6);
     --glass:rgba(255,255,255,.05); --glass-hi:rgba(255,255,255,.16);
     --disp:'Bricolage Grotesque',system-ui,sans-serif;
@@ -40,8 +40,8 @@ export const THEME = raw(`
   /* a faint neon haze, so the frosted panels have something to blur */
   body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
     background:
-      radial-gradient(60% 40% at 8% 0%,rgba(133,121,189,.11),transparent 70%),
-      radial-gradient(50% 40% at 96% 100%,rgba(133,121,189,.07),transparent 70%)}
+      radial-gradient(60% 40% at 8% 0%,rgba(233,163,25,.11),transparent 70%),
+      radial-gradient(50% 40% at 96% 100%,rgba(233,163,25,.07),transparent 70%)}
   body > *{position:relative;z-index:1}
   a{color:inherit;text-decoration:none}
   h1,h2,h3,.disp{font-family:var(--disp);font-weight:800;letter-spacing:-.04em;line-height:1.02}
@@ -64,7 +64,7 @@ export const THEME = raw(`
     transition:background .2s var(--e),color .2s var(--e),border-color .2s var(--e),
       transform .2s var(--e),box-shadow .2s var(--e)}
   .btn:hover{border-color:var(--neon-deep);transform:translateY(-1px);box-shadow:0 8px 24px -10px var(--neon-glow)}
-  .btn.primary{background:var(--neon);color:var(--white);border-color:var(--neon)}
+  .btn.primary{background:var(--neon);color:var(--black);border-color:var(--neon)}
   .btn.primary:hover{box-shadow:0 10px 28px -8px var(--neon-glow)}
   .btn.ghost{background:transparent}
   .btn.ghost:hover{background:rgba(255,255,255,.08)}
@@ -73,7 +73,7 @@ export const THEME = raw(`
     backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
     border:1px solid var(--line);border-radius:10px;padding:9px 13px;outline:none;
     transition:border-color .2s,box-shadow .2s}
-  input:focus,select:focus,textarea:focus{border-color:var(--neon-deep);box-shadow:0 0 0 3px rgba(133,121,189,.18)}
+  input:focus,select:focus,textarea:focus{border-color:var(--neon-deep);box-shadow:0 0 0 3px rgba(233,163,25,.18)}
   select{cursor:pointer}
   select option{background:#141418;color:var(--white)}
 
