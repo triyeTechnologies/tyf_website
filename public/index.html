@@ -1033,11 +1033,13 @@
 
   /* ── team ───────────────────────────────────────────────────────────── */
   .team{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-  .mem{position:relative;text-align:center}
-  /* Round, app-icon sized, centred over the name rather than sitting left of
-     it. Fixed rather than fluid: below ~90px a face stops being legible. */
+  /* --face is the one number to change: the ring derives from it, so the two
+     cannot drift apart. Fixed rather than fluid — below ~90px a face stops
+     being legible, so it should not track the column. */
+  .mem{position:relative;text-align:center;--face:140px;--ring:calc(var(--face) + 16px)}
+  /* Round and centred over the name rather than sitting left of it. */
   .mem .slot{
-    aspect-ratio:1/1;width:96px;margin:0 auto 16px;border-radius:50%;
+    aspect-ratio:1/1;width:var(--face);margin:0 auto 16px;border-radius:50%;
     transition:transform .45s var(--e),box-shadow .45s var(--e);
   }
   /* One neon arc orbiting the portrait — the same conic sweep and the same
@@ -1048,8 +1050,8 @@
      disc. `spin` is the keyframe already defined in the motion layer, and the
      reduced-motion block above stops it along with everything else. */
   .mem::before{
-    content:"";position:absolute;top:-8px;left:50%;margin-left:-56px;
-    width:112px;height:112px;border-radius:50%;z-index:0;pointer-events:none;
+    content:"";position:absolute;top:-8px;left:50%;margin-left:calc(var(--ring) / -2);
+    width:var(--ring);height:var(--ring);border-radius:50%;z-index:0;pointer-events:none;
     background:conic-gradient(from 0deg,transparent 0 58%,var(--neon) 78%,transparent 88%);
     -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 2px),#000 calc(100% - 2px));
     mask:radial-gradient(farthest-side,transparent calc(100% - 2px),#000 calc(100% - 2px));
