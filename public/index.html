@@ -296,6 +296,9 @@
   .slot > img{position:absolute;inset:0;z-index:2;width:100%;height:100%;object-fit:cover}
   /* garment shots are product photography: contain them so nothing is cropped */
   .slot.contain > img{object-fit:contain;background:var(--white)}
+  /* a screenshot framed edge to edge reads as a document; a little push in
+     past the chrome makes it read as a product */
+  .slot.zoom > img{transform:scale(1.08)}
   .slot.is-filled::before,.slot.is-filled::after{opacity:0}
 
   /* ── inputs strip ───────────────────────────────────────────────────────
@@ -919,10 +922,100 @@
     width:8px;height:8px;border-radius:50%;background:var(--neon);
     box-shadow:0 0 12px var(--neon-glow);animation:pulse 2s var(--e) infinite;
   }
-  .api pre{padding:22px;font-family:var(--mono);font-size:13.2px;line-height:1.85;overflow-x:auto}
-  .api .c-dim{color:rgba(255,255,255,.42)}
-  .api .c-key{color:var(--neon)}
-  .api .c-str{color:rgba(255,255,255,.78)}
+  /* ── the request, drawn ─────────────────────────────────────────────────
+     One 5s cycle drives every part. Each element runs the same 5s duration
+     and does its work inside its own slice of the keyframes, rather than
+     each carrying its own duration and delay — that way nothing can drift
+     out of step, and there is one number to change to retime the whole
+     thing. Percentages below map to: 10-30% inputs, 12-38% packets in,
+     34-64% engine, 62-74% packet out, 66-94% result.               */
+  .api .bar-t em{
+    margin-left:auto;font-style:normal;font-size:10.5px;letter-spacing:.18em;
+    color:var(--neon);opacity:.75;
+  }
+  .api .flow{display:block;width:100%;height:auto;background:rgba(255,255,255,.014)}
+
+  /* node boxes */
+  .flow .fn rect{fill:rgba(255,255,255,.045);stroke:rgba(255,255,255,.14);stroke-width:1}
+  .flow .k{font-family:var(--disp);font-weight:600;font-size:11px;letter-spacing:.16em;
+    text-transform:uppercase;fill:rgba(255,255,255,.55)}
+  .flow .v{font-family:var(--mono);font-size:12px;fill:rgba(255,255,255,.85)}
+  .flow .mid{text-anchor:middle}
+
+  /* the two inputs light as the call is made, the result as it returns */
+  .flow .f-in,.flow .f-out{animation:flowLit 5s linear infinite}
+  .flow .f-in.d2{animation-name:flowLit2}
+  .flow .f-out{animation-name:flowLitOut}
+  .flow .f-out rect{fill:rgba(194,255,51,.07);stroke:rgba(194,255,51,.42)}
+  .flow .f-eng rect{fill:rgba(255,255,255,.06);stroke:rgba(194,255,51,.34)}
+
+  /* wires, and the packet that runs along them */
+  .flow .wire{fill:none;stroke:rgba(255,255,255,.16);stroke-width:1.5}
+  .flow .pkt{
+    fill:none;stroke:var(--neon);stroke-width:2;stroke-linecap:round;
+    stroke-dasharray:7 93;filter:drop-shadow(0 0 5px var(--neon-glow));
+    animation:flowPkt 5s linear infinite;
+  }
+  .flow .pkt.d2{animation-name:flowPkt2}
+  .flow .pkt.out{animation-name:flowPktOut}
+
+  /* the engine working */
+  .flow .scan{
+    fill:var(--neon);opacity:.14;
+    animation:flowScan 5s ease-in-out infinite;
+  }
+
+  .api .bar-b{
+    display:flex;align-items:center;gap:12px;padding:12px 18px;
+    border-top:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);
+    font-family:var(--mono);font-size:12px;
+  }
+  .api .bar-b .ok{
+    color:var(--neon);font-family:var(--disp);font-weight:600;letter-spacing:.12em;font-size:11.5px;
+    animation:flowLitOut 5s linear infinite;
+  }
+  .api .bar-b .ms{color:rgba(255,255,255,.45)}
+  .api .bar-b .meter{
+    margin-left:auto;width:min(120px,38%);height:3px;border-radius:2px;
+    background:rgba(255,255,255,.14);overflow:hidden;
+  }
+  .api .bar-b .meter i{
+    display:block;height:100%;background:var(--neon);border-radius:2px;
+    transform-origin:left center;animation:flowMeter 5s ease-in-out infinite;
+  }
+
+  @keyframes flowLit{0%,6%{opacity:.4}12%,30%{opacity:1}40%,100%{opacity:.4}}
+  @keyframes flowLit2{0%,10%{opacity:.4}16%,30%{opacity:1}40%,100%{opacity:.4}}
+  @keyframes flowLitOut{0%,64%{opacity:.35}70%,92%{opacity:1}98%,100%{opacity:.35}}
+  @keyframes flowPkt{
+    0%,12%{stroke-dashoffset:100;opacity:0}
+    15%{opacity:1}
+    34%{stroke-dashoffset:0;opacity:1}
+    38%,100%{stroke-dashoffset:0;opacity:0}
+  }
+  @keyframes flowPkt2{
+    0%,16%{stroke-dashoffset:100;opacity:0}
+    19%{opacity:1}
+    38%{stroke-dashoffset:0;opacity:1}
+    42%,100%{stroke-dashoffset:0;opacity:0}
+  }
+  @keyframes flowPktOut{
+    0%,62%{stroke-dashoffset:100;opacity:0}
+    64%{opacity:1}
+    72%{stroke-dashoffset:0;opacity:1}
+    76%,100%{stroke-dashoffset:0;opacity:0}
+  }
+  @keyframes flowScan{
+    0%,34%{transform:translateY(0);opacity:0}
+    38%{opacity:.9}
+    60%{transform:translateY(38px);opacity:.9}
+    66%,100%{transform:translateY(38px);opacity:0}
+  }
+  @keyframes flowMeter{
+    0%,34%{transform:scaleX(0)}
+    66%,92%{transform:scaleX(1)}
+    100%{transform:scaleX(0)}
+  }
 
   /* ── closet ─────────────────────────────────────────────────────────────
      The tiles hold real garment artwork on white, so they stay white cards
@@ -1036,7 +1129,7 @@
   /* --face is the one number to change: the ring derives from it, so the two
      cannot drift apart. Fixed rather than fluid — below ~90px a face stops
      being legible, so it should not track the column. */
-  .mem{position:relative;text-align:center;--face:140px;--ring:calc(var(--face) + 16px)}
+  .mem{position:relative;text-align:center;--face:160px;--ring:calc(var(--face) + 16px)}
   /* Round and centred over the name rather than sitting left of it. */
   .mem .slot{
     aspect-ratio:1/1;width:var(--face);margin:0 auto 16px;border-radius:50%;
@@ -1164,7 +1257,12 @@
   .js [data-reveal="mask"]{clip-path:inset(0 0 100% 0);transform:translateY(18px)}
   .js [data-reveal="left"]{transform:translateX(-26px)}
   .js [data-reveal="right"]{transform:translateX(26px)}
-  .js [data-reveal].in{opacity:1;transform:none;clip-path:inset(0 0 0 0)}
+  /* `mask` is the only variant that animates clip-path, so only it gets one
+     back. Applying inset(0 0 0 0) to every revealed element clips it to its
+     exact border box for good — which silently cuts anything that later moves
+     outside those bounds, such as a hover lift or a ring drawn past the edge. */
+  .js [data-reveal].in{opacity:1;transform:none}
+  .js [data-reveal="mask"].in{clip-path:inset(0 0 0 0)}
 
   /* split headlines — each word rises out of its own mask */
   .w{display:inline-block;overflow:hidden;vertical-align:bottom;padding-bottom:.14em;margin-bottom:-.14em}
@@ -1696,7 +1794,7 @@
           </ul>
           <a href="#join" class="btn b1 mt-m" data-magnetic>Join the waitlist <span class="a">→</span></a>
         </div>
-        <figure class="slot v2" data-reveal="right" style="aspect-ratio:4/5"
+        <figure class="slot v2 zoom" data-reveal="right" style="aspect-ratio:4/5"
                 data-spec="images/app.png · 928×1152 · app screen">
           <img src="images/app.png" alt="The TyF app showing a wardrobe of saved garments"
                loading="lazy" decoding="async"></figure>
@@ -1718,16 +1816,57 @@
           <button class="btn b1 mt-m" data-pilot data-magnetic>Book a pilot <span class="a">→</span></button>
         </div>
 
+        <!-- The same request the curl example used to show, drawn as the trip
+             it actually makes. One loop = one call: both images in, engine,
+             rendered result out. Everything runs off a single 5s cycle so the
+             parts stay in step; the reduced-motion block stops all of it. -->
         <div class="api" data-reveal="right">
-          <div class="bar-t"><i></i>POST /v1/tryon</div>
-<pre><span class="c-dim">// two URLs in, one image out</span>
-<span class="c-key">curl</span> https://api.tryyourfit.in/v1/tryon \
-  -H <span class="c-str">"Authorization: Bearer $TYF_KEY"</span> \
-  -d <span class="c-str">'{"person":"…/u/91.jpg",</span>
-     <span class="c-str">"garment":"…/p/4417.jpg"}'</span>
+          <div class="bar-t"><i></i>POST /v1/tryon<em>live</em></div>
 
-<span class="c-dim">// 200 OK · 9.4s</span>
-{ "url": "…/r/8f21c.png", "ms": 9412 }</pre>
+          <svg class="flow" viewBox="0 0 360 268" role="img"
+               aria-label="A try-on request: one photo of a customer and one of a garment go into the TyF engine and come back as a single rendered image in about nine seconds.">
+            <!-- inputs -->
+            <g class="fn f-in">
+              <rect x="14" y="10" width="140" height="46" rx="12"/>
+              <text class="k" x="30" y="31">person</text>
+              <text class="v" x="30" y="46">…/u/91.jpg</text>
+            </g>
+            <g class="fn f-in d2">
+              <rect x="206" y="10" width="140" height="46" rx="12"/>
+              <text class="k" x="222" y="31">garment</text>
+              <text class="v" x="222" y="46">…/p/4417.jpg</text>
+            </g>
+
+            <!-- inputs converge on the engine -->
+            <path class="wire" d="M84 56 V78 Q84 92 98 92 H166 Q180 92 180 106 V116"/>
+            <path class="wire" d="M276 56 V78 Q276 92 262 92 H194 Q180 92 180 106 V116"/>
+            <path class="pkt"  pathLength="100" d="M84 56 V78 Q84 92 98 92 H166 Q180 92 180 106 V116"/>
+            <path class="pkt d2" pathLength="100" d="M276 56 V78 Q276 92 262 92 H194 Q180 92 180 106 V116"/>
+
+            <!-- engine -->
+            <g class="fn f-eng">
+              <rect x="90" y="116" width="180" height="52" rx="14"/>
+              <text class="k mid" x="180" y="141">TyF engine</text>
+              <text class="v mid" x="180" y="157">diffusion · 16 GB</text>
+            </g>
+            <clipPath id="engClip"><rect x="90" y="116" width="180" height="52" rx="14"/></clipPath>
+            <g clip-path="url(#engClip)"><rect class="scan" x="90" y="116" width="180" height="14"/></g>
+
+            <!-- result -->
+            <path class="wire" d="M180 168 V202"/>
+            <path class="pkt out" pathLength="100" d="M180 168 V202"/>
+            <g class="fn f-out">
+              <rect x="90" y="202" width="180" height="52" rx="14"/>
+              <text class="k mid" x="180" y="227">result</text>
+              <text class="v mid" x="180" y="243">…/r/8f21c.png</text>
+            </g>
+          </svg>
+
+          <div class="bar-b">
+            <span class="ok">200 OK</span>
+            <span class="ms">9.4s</span>
+            <span class="meter"><i></i></span>
+          </div>
         </div>
       </div>
     </div>
