@@ -22,12 +22,12 @@ export const THEME = raw(`
 
   :root{
     /* the same three colours as the public site */
-    --black:#0A0A0C; --white:#FFFFFF; --neon:#8140DC;
+    --black:#0A0A0C; --white:#FFFFFF; --neon:#CA5995;
     /* The accent adjusted to read as a mark on this background — lighter or
        darker depending on the accent. Checked by: npm run contrast
        (no backticks in here: this whole block is a template literal). */
-    --neon-deep:#9A66E3;
-    --neon-glow:rgba(129,64,220,.34);
+    --neon-deep:#D06DA2;
+    --neon-glow:rgba(202,89,149,.34);
     --line:rgba(255,255,255,.14); --muted:rgba(255,255,255,.6);
     --glass:rgba(255,255,255,.05); --glass-hi:rgba(255,255,255,.16);
     --disp:'Bricolage Grotesque',system-ui,sans-serif;
@@ -40,8 +40,8 @@ export const THEME = raw(`
   /* a faint neon haze, so the frosted panels have something to blur */
   body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
     background:
-      radial-gradient(60% 40% at 8% 0%,rgba(129,64,220,.11),transparent 70%),
-      radial-gradient(50% 40% at 96% 100%,rgba(129,64,220,.07),transparent 70%)}
+      radial-gradient(60% 40% at 8% 0%,rgba(202,89,149,.11),transparent 70%),
+      radial-gradient(50% 40% at 96% 100%,rgba(202,89,149,.07),transparent 70%)}
   body > *{position:relative;z-index:1}
   a{color:inherit;text-decoration:none}
   h1,h2,h3,.disp{font-family:var(--disp);font-weight:800;letter-spacing:-.04em;line-height:1.02}
@@ -64,7 +64,7 @@ export const THEME = raw(`
     transition:background .2s var(--e),color .2s var(--e),border-color .2s var(--e),
       transform .2s var(--e),box-shadow .2s var(--e)}
   .btn:hover{border-color:var(--neon-deep);transform:translateY(-1px);box-shadow:0 8px 24px -10px var(--neon-glow)}
-  .btn.primary{background:var(--neon);color:var(--white);border-color:var(--neon)}
+  .btn.primary{background:var(--neon);color:var(--black);border-color:var(--neon)}
   .btn.primary:hover{box-shadow:0 10px 28px -8px var(--neon-glow)}
   .btn.ghost{background:transparent}
   .btn.ghost:hover{background:rgba(255,255,255,.08)}
@@ -73,7 +73,7 @@ export const THEME = raw(`
     backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
     border:1px solid var(--line);border-radius:10px;padding:9px 13px;outline:none;
     transition:border-color .2s,box-shadow .2s}
-  input:focus,select:focus,textarea:focus{border-color:var(--neon-deep);box-shadow:0 0 0 3px rgba(129,64,220,.18)}
+  input:focus,select:focus,textarea:focus{border-color:var(--neon-deep);box-shadow:0 0 0 3px rgba(202,89,149,.18)}
   select{cursor:pointer}
   select option{background:#141418;color:var(--white)}
 
