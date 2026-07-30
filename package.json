@@ -19,7 +19,9 @@
     "db:reset": "node scripts/reset-db.js",
     "db:seed": "node scripts/seed-db.js",
     "export": "node scripts/export-csv.js",
-    "token": "node scripts/make-token.js"
+    "token": "node scripts/make-token.js",
+    "csp": "node scripts/csp-hashes.js --check",
+    "og": "node scripts/make-og.js"
   },
   "dependencies": {
     "@sentry/node": "^10.69.0",

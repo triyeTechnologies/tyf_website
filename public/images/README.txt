@@ -10,9 +10,9 @@ showcase/ — the try-on looks  (IN USE)
 ──────────────────────────────────────────────────────────────────────────
 Seven complete looks, each three files. These are live on the site now.
 
-  showcase/look-N-person.png    the model in their own clothes  (was N.1.png)
-  showcase/look-N-garment.png   the garment on its own          (was N.3.png)
-  showcase/look-N-result.png    the TyF output                  (was N.2.png)
+  showcase/look-N-person.webp    the model in their own clothes
+  showcase/look-N-garment.webp   the garment on its own
+  showcase/look-N-result.webp    the TyF output
 
   N runs 1 to 7. All are 3:4 portraits, around 386x517.
 
@@ -25,22 +25,19 @@ Seven complete looks, each three files. These are live on the site now.
   Adding an eighth look: copy a gallery <figure> in the RESULTS section of
   index.html and change the 7 to an 8. Nothing else needs touching.
 
-  These are PNGs totalling ~3 MB. Re-exporting them as WebP at quality 82
-  would cut that to roughly 700 KB with no visible difference — worth doing
-  before launch.
+  These were PNGs totalling 3.06 MB. Re-encoded as WebP at quality 82 they
+  come to 0.23 MB — 93% smaller, with no visible difference. Export
+  replacements as WebP too; a PNG here costs about ten times its worth.
 
 in use
 ──────────────────────────────────────────────────────────────────────────
-  app.png               928 x 1152   app screen · PRODUCT section
+  app.webp               928 x 1152   app screen · PRODUCT section
   team-akhilesh.webp    640 x 640    headshot
   team-akshay.webp      640 x 640    headshot
   team-aditya.webp      473 x 640    headshot · cropped square by object-fit
 
-  app.png is ~1.2 MB, which is most of the page's image weight on its own.
-  As a WebP at quality 82 it would be well under 200 KB with no visible
-  difference. It loads lazily and sits below the fold, so it costs nothing
-  on first paint — but it is still the first thing to fix on a slow
-  connection.
+  app.webp was a 1.2 MB PNG and is now 22 KB — a screenshot of flat UI is
+  the best case WebP has. It still loads lazily, below the fold.
 
 still placeholders
 ──────────────────────────────────────────────────────────────────────────
