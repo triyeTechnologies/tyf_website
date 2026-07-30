@@ -27,7 +27,7 @@
 <meta property="og:image:alt" content="Try your Fit — wear it before you buy it. Two photos in, you wearing it out.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://triyefit.vercel.app/images/og.png">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230A0A0C'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23CA5995'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230A0A0C'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23E0BE93'/%3E%3C/svg%3E">
 <!-- Fonts are served from this origin (see the @font-face block below), so
      there is nothing to preconnect to. These two carry the characters almost
      every visitor needs; the latin-ext pair loads only if a page actually uses
@@ -82,7 +82,7 @@
   Triye Technologies · Bengaluru
 
   THREE COLOURS, NOTHING ELSE
-    black #0A0A0C · white #FFFFFF · neon #CA5995
+    black #0A0A0C · white #FFFFFF · neon #E0BE93
     Sections alternate black-on-white and white-on-black; neon is the only
     accent and is never used for body text. Surfaces are frosted glass —
     translucent, blurred, hairline-bordered, lit from above.
@@ -161,7 +161,7 @@
     /* ── the palette, in full ── */
     --black:#0A0A0C;
     --white:#FFFFFF;
-    --neon:#CA5995;
+    --neon:#E0BE93;
 
     /* ── mixes of the above, no new hues ── */
     /* The accent, adjusted so it reads as a MARK on the page: text, strokes,
@@ -177,8 +177,8 @@
        Deliberately no fixed ratios in this comment. They were rewritten by
        hand at every colour change and were wrong more often than not, which
        is the most misleading kind of documentation: specific and stale. */
-    --neon-deep:#D06DA2;
-    --neon-glow:rgba(202,89,149,.38);
+    --neon-deep:#B89C79;
+    --neon-glow:rgba(224,190,147,.38);
     --grey:#6E6E77;
 
     /* ── semantic surface set — the light band is the default ── */
@@ -293,8 +293,8 @@
   .b-dark::before{
     content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
     background:
-      radial-gradient(62% 48% at 12% -4%,rgba(202,89,149,.12),transparent 70%),
-      radial-gradient(48% 42% at 92% 104%,rgba(202,89,149,.08),transparent 70%);
+      radial-gradient(62% 48% at 12% -4%,rgba(224,190,147,.12),transparent 70%),
+      radial-gradient(48% 42% at 92% 104%,rgba(224,190,147,.08),transparent 70%);
   }
   .b-dark > *{position:relative;z-index:1}
 
@@ -379,8 +379,8 @@
   .slot::before{
     content:"";position:absolute;inset:0;z-index:1;
     background:
-      repeating-linear-gradient(45deg,rgba(202,89,149,.09) 0 10px,transparent 10px 24px),
-      radial-gradient(70% 60% at 20% 10%,rgba(202,89,149,.14),transparent 70%);
+      repeating-linear-gradient(45deg,rgba(224,190,147,.09) 0 10px,transparent 10px 24px),
+      radial-gradient(70% 60% at 20% 10%,rgba(224,190,147,.14),transparent 70%);
     transition:opacity var(--t-mid) var(--e);
   }
   .slot::after{
@@ -440,16 +440,16 @@
   /* variants keep the placeholders from looking mass-produced */
   .slot.v2{background:linear-gradient(200deg,#16161B,#0A0A0C 60%,#1E1E24)}
   .slot.v2::before{background:
-    repeating-linear-gradient(-45deg,rgba(202,89,149,.08) 0 10px,transparent 10px 24px),
-    radial-gradient(60% 60% at 80% 15%,rgba(202,89,149,.16),transparent 70%)}
+    repeating-linear-gradient(-45deg,rgba(224,190,147,.08) 0 10px,transparent 10px 24px),
+    radial-gradient(60% 60% at 80% 15%,rgba(224,190,147,.16),transparent 70%)}
   .slot.v3{background:linear-gradient(115deg,#0A0A0C,#1D1D23 55%,#0F0F13)}
   .slot.v3::before{background:
-    repeating-linear-gradient(90deg,rgba(202,89,149,.07) 0 8px,transparent 8px 26px),
-    radial-gradient(70% 50% at 50% 100%,rgba(202,89,149,.15),transparent 70%)}
+    repeating-linear-gradient(90deg,rgba(224,190,147,.07) 0 8px,transparent 8px 26px),
+    radial-gradient(70% 50% at 50% 100%,rgba(224,190,147,.15),transparent 70%)}
   .slot.v4{background:linear-gradient(160deg,#121216,#0A0A0C 50%,#191920)}
   .slot.v4::before{background:
-    repeating-linear-gradient(0deg,rgba(202,89,149,.07) 0 8px,transparent 8px 26px),
-    radial-gradient(60% 60% at 15% 90%,rgba(202,89,149,.16),transparent 70%)}
+    repeating-linear-gradient(0deg,rgba(224,190,147,.07) 0 8px,transparent 8px 26px),
+    radial-gradient(60% 60% at 15% 90%,rgba(224,190,147,.16),transparent 70%)}
 
   /* ── tiles ──────────────────────────────────────────────────────────── */
   .tile{
@@ -500,7 +500,7 @@
     flex:none;width:22px;height:22px;border-radius:50%;background:var(--neon);margin-top:2px;
     display:grid;place-items:center;transition:transform var(--t-fast) var(--e-spring);
   }
-  .fl li:hover .dot{transform:scale(1.18);box-shadow:0 0 0 6px rgba(202,89,149,.16)}
+  .fl li:hover .dot{transform:scale(1.18);box-shadow:0 0 0 6px rgba(224,190,147,.16)}
   .dot::after{
     content:"";width:7px;height:4px;border-left:2px solid var(--black);border-bottom:2px solid var(--black);
     transform:rotate(-45deg) translate(1px,-1px);
@@ -520,7 +520,7 @@
   }
   .field textarea{resize:vertical;min-height:96px;border-radius:14px}
   .field input:focus,.field select:focus,.field textarea:focus{
-    border-color:var(--neon-deep);box-shadow:0 0 0 4px rgba(202,89,149,.2);
+    border-color:var(--neon-deep);box-shadow:0 0 0 4px rgba(224,190,147,.2);
   }
   .field.has-error input,.field.has-error select,.field.has-error textarea{border-color:var(--black)}
   .field .msg{font-size:12.6px;color:var(--black);font-weight:500;display:none}
@@ -600,7 +600,7 @@
   .triptych img.gar{object-fit:contain;padding:6%}
   .triptych .res img{
     border-color:var(--neon-deep);
-    box-shadow:0 0 0 2px rgba(202,89,149,.32),0 20px 44px -22px var(--neon-glow);
+    box-shadow:0 0 0 2px rgba(224,190,147,.32),0 20px 44px -22px var(--neon-glow);
   }
   .triptych figcaption{
     margin-top:10px;text-align:center;font-family:var(--disp);font-weight:600;font-size:10.5px;
@@ -772,9 +772,9 @@
   /* ── hero ───────────────────────────────────────────────────────────── */
   .hero{padding:132px 0 0;overflow:hidden}
   .blob{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0}
-  .blob1{width:520px;height:520px;background:rgba(202,89,149,.5);top:-140px;left:-120px}
+  .blob1{width:520px;height:520px;background:rgba(224,190,147,.5);top:-140px;left:-120px}
   .blob2{width:430px;height:430px;background:rgba(10,10,12,.14);top:180px;right:-110px}
-  .blob3{width:340px;height:340px;background:rgba(202,89,149,.38);bottom:-40px;left:38%}
+  .blob3{width:340px;height:340px;background:rgba(224,190,147,.38);bottom:-40px;left:38%}
   .blob i{display:block;width:100%;height:100%;border-radius:50%;background:inherit;animation:drift 21s var(--e-soft) infinite}
   .blob2 i{animation-duration:26s;animation-direction:reverse}
   .blob3 i{animation-duration:31s}
@@ -845,7 +845,7 @@
   }
   .grip{
     position:absolute;top:50%;left:50%;translate:-50% -50%;width:56px;height:56px;border-radius:50%;
-    background:rgba(202,89,149,.9);color:var(--black);
+    background:rgba(224,190,147,.9);color:var(--black);
     backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
     border:1px solid rgba(255,255,255,.5);display:grid;place-items:center;
     box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 10px 30px -8px var(--neon-glow);
@@ -860,7 +860,7 @@
     border:1px solid rgba(255,255,255,.24);
   }
   .pill-a{left:16px;background:rgba(255,255,255,.18);color:var(--white)}
-  .pill-b{right:16px;background:rgba(202,89,149,.9);color:var(--black);border-color:rgba(255,255,255,.5)}
+  .pill-b{right:16px;background:rgba(224,190,147,.9);color:var(--black);border-color:rgba(255,255,255,.5)}
 
   /* The photographs are the point, so the stat cards stay compact and sit
      centred beside them rather than stretching to match their height. */
@@ -977,7 +977,7 @@
   .pick img{width:100%;height:100%;object-fit:cover}
   .pick.gar img{object-fit:contain;padding:2px}
   .pick:hover{opacity:.85;transform:translateY(-2px)}
-  .pick.on{opacity:1;border-color:var(--neon-deep);box-shadow:0 0 0 2px rgba(202,89,149,.32)}
+  .pick.on{opacity:1;border-color:var(--neon-deep);box-shadow:0 0 0 2px rgba(224,190,147,.32)}
 
   .try-go{width:100%;justify-content:center;margin:12px 0 2px}
   .step .cap{margin-top:14px}
@@ -1053,8 +1053,8 @@
   .flow .f-in,.flow .f-out{animation:flowLit 5s linear infinite}
   .flow .f-in.d2{animation-name:flowLit2}
   .flow .f-out{animation-name:flowLitOut}
-  .flow .f-out rect{fill:rgba(202,89,149,.07);stroke:rgba(202,89,149,.42)}
-  .flow .f-eng rect{fill:rgba(255,255,255,.06);stroke:rgba(202,89,149,.34)}
+  .flow .f-out rect{fill:rgba(224,190,147,.07);stroke:rgba(224,190,147,.42)}
+  .flow .f-eng rect{fill:rgba(255,255,255,.06);stroke:rgba(224,190,147,.34)}
 
   /* wires, and the packet that runs along them */
   .flow .wire{fill:none;stroke:rgba(255,255,255,.16);stroke-width:1.5}
@@ -1138,7 +1138,7 @@
   }
   .gm:hover{transform:translateY(-4px);border-color:var(--line-strong)}
   .gm.on{
-    border-color:var(--neon-deep);background:rgba(202,89,149,.12);
+    border-color:var(--neon-deep);background:rgba(224,190,147,.12);
     box-shadow:inset 0 1px 0 var(--glass-hi),0 14px 34px -14px var(--neon-glow);
   }
   /* the garment itself: a real image if one exists, the drawing otherwise */
@@ -1303,8 +1303,8 @@
   .cta::before{
     content:"";position:absolute;inset:-40%;pointer-events:none;
     background:
-      radial-gradient(circle at 30% 30%,rgba(202,89,149,.3),transparent 52%),
-      radial-gradient(circle at 78% 76%,rgba(202,89,149,.16),transparent 55%);
+      radial-gradient(circle at 30% 30%,rgba(224,190,147,.3),transparent 52%),
+      radial-gradient(circle at 78% 76%,rgba(224,190,147,.16),transparent 55%);
     animation:sheen 14s var(--e-soft) infinite alternate;
   }
   .cta > *{position:relative;z-index:1}
@@ -1319,7 +1319,7 @@
     transition:box-shadow var(--t-fast) var(--e),border-color var(--t-fast);
   }
   .form input::placeholder{color:rgba(255,255,255,.5)}
-  .form input:focus{border-color:var(--neon-deep);box-shadow:0 0 0 4px rgba(202,89,149,.22)}
+  .form input:focus{border-color:var(--neon-deep);box-shadow:0 0 0 4px rgba(224,190,147,.22)}
   .form.has-error input{border-color:var(--white);box-shadow:0 0 0 4px rgba(255,255,255,.22)}
   .done{
     display:none;margin:32px auto 0;max-width:540px;padding:22px;border-radius:var(--r-lg);
@@ -1549,7 +1549,7 @@
         <svg viewBox="0 0 120 120" aria-hidden="true">
           <defs><path id="circ" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"/></defs>
           <circle cx="60" cy="60" r="58" fill="#0A0A0C"/>
-          <text font-family="Bricolage Grotesque,sans-serif" font-size="12.5" font-weight="600" fill="#CA5995" letter-spacing="3.4">
+          <text font-family="Bricolage Grotesque,sans-serif" font-size="12.5" font-weight="600" fill="#E0BE93" letter-spacing="3.4">
             <textPath href="#circ">· TWO PHOTOS · TEN SECONDS · ZERO QUEUES </textPath>
           </text>
         </svg>

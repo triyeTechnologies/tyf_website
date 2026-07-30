@@ -22,12 +22,12 @@ export const THEME = raw(`
 
   :root{
     /* the same three colours as the public site */
-    --black:#0A0A0C; --white:#FFFFFF; --neon:#CA5995;
+    --black:#0A0A0C; --white:#FFFFFF; --neon:#E0BE93;
     /* The accent adjusted to read as a mark on this background — lighter or
        darker depending on the accent. Checked by: npm run contrast
        (no backticks in here: this whole block is a template literal). */
-    --neon-deep:#D06DA2;
-    --neon-glow:rgba(202,89,149,.34);
+    --neon-deep:#B89C79;
+    --neon-glow:rgba(224,190,147,.34);
     --line:rgba(255,255,255,.14); --muted:rgba(255,255,255,.6);
     --glass:rgba(255,255,255,.05); --glass-hi:rgba(255,255,255,.16);
     --disp:'Bricolage Grotesque',system-ui,sans-serif;
@@ -40,8 +40,8 @@ export const THEME = raw(`
   /* a faint neon haze, so the frosted panels have something to blur */
   body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
     background:
-      radial-gradient(60% 40% at 8% 0%,rgba(202,89,149,.11),transparent 70%),
-      radial-gradient(50% 40% at 96% 100%,rgba(202,89,149,.07),transparent 70%)}
+      radial-gradient(60% 40% at 8% 0%,rgba(224,190,147,.11),transparent 70%),
+      radial-gradient(50% 40% at 96% 100%,rgba(224,190,147,.07),transparent 70%)}
   body > *{position:relative;z-index:1}
   a{color:inherit;text-decoration:none}
   h1,h2,h3,.disp{font-family:var(--disp);font-weight:800;letter-spacing:-.04em;line-height:1.02}
@@ -73,7 +73,7 @@ export const THEME = raw(`
     backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
     border:1px solid var(--line);border-radius:10px;padding:9px 13px;outline:none;
     transition:border-color .2s,box-shadow .2s}
-  input:focus,select:focus,textarea:focus{border-color:var(--neon-deep);box-shadow:0 0 0 3px rgba(202,89,149,.18)}
+  input:focus,select:focus,textarea:focus{border-color:var(--neon-deep);box-shadow:0 0 0 3px rgba(224,190,147,.18)}
   select{cursor:pointer}
   select option{background:#141418;color:var(--white)}
 

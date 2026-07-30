@@ -36,11 +36,11 @@ const ANCIENT_UA =
 const FAMILIES = { display: 'Bricolage+Grotesque:800', body: 'Inter:400' };
 
 const BLACK = '#0A0A0C';
-const NEON = '#CA5995';
+const NEON = '#E0BE93';
 // The accent adjusted to read as a mark on the near-black field — lighter
 // or darker depending on the accent. Kept in step with the site palette by
 // npm run contrast; the fill colour proper stays in the haze behind.
-const NEON_SOFT = '#D06DA2';
+const NEON_SOFT = '#B89C79';
 const WHITE = '#FFFFFF';
 const MUTED = 'rgba(255,255,255,0.62)';
 
@@ -89,14 +89,14 @@ const card = el('div', {
   el('div', {
     style: {
       position: 'absolute', top: '-260px', left: '-160px', width: '760px', height: '760px',
-      borderRadius: '9999px', background: 'radial-gradient(circle closest-side, rgba(202,89,149,0.20), rgba(202,89,149,0))',
+      borderRadius: '9999px', background: 'radial-gradient(circle closest-side, rgba(224,190,147,0.20), rgba(224,190,147,0))',
       display: 'flex',
     },
   }),
   el('div', {
     style: {
       position: 'absolute', bottom: '-320px', right: '-180px', width: '720px', height: '720px',
-      borderRadius: '9999px', background: 'radial-gradient(circle closest-side, rgba(202,89,149,0.13), rgba(202,89,149,0))',
+      borderRadius: '9999px', background: 'radial-gradient(circle closest-side, rgba(224,190,147,0.13), rgba(224,190,147,0))',
       display: 'flex',
     },
   }),
