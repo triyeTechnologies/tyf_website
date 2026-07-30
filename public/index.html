@@ -1033,10 +1033,11 @@
 
   /* ── team ───────────────────────────────────────────────────────────── */
   .team{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-  /* A headshot stretched to a third of the page reads as a billboard. Capped
-     so it stays a portrait next to the text, and shrinks with the column
-     rather than fighting it. */
-  .mem .slot{aspect-ratio:1/1;margin-bottom:16px;width:100%;max-width:200px}
+  /* A headshot stretched to a third of the page reads as a billboard. At this
+     size, with the 18px corner radius the slot already carries, it reads as an
+     app icon instead — which is the intent. Fixed rather than fluid: below
+     ~100px a face stops being legible, so it should not shrink further. */
+  .mem .slot{aspect-ratio:1/1;margin-bottom:16px;width:96px;max-width:100%}
   .mem h3{margin-bottom:6px}
   .mem .role{
     font-family:var(--disp);font-weight:600;font-size:12px;letter-spacing:.16em;
