@@ -8,26 +8,35 @@ while you are still shooting.
 
 showcase/ — the try-on looks  (IN USE)
 ──────────────────────────────────────────────────────────────────────────
-Seven complete looks, each three files. These are live on the site now.
+Nine complete looks, each three files. These are live on the site now.
 
   showcase/look-N-person.webp    the model in their own clothes
   showcase/look-N-garment.webp   the garment on its own
   showcase/look-N-result.webp    the TyF output
 
-  N runs 1 to 7. All are 3:4 portraits, around 386x517.
+  N runs 1 to 9. All are 3:4 portraits at 480x640.
+
+  If your export names them N.1 / N.2 / N.3, the mapping is
+  1 = person, 2 = garment, 3 = result.
 
   Where each one appears:
-    look-1  hero comparison slider (person -> result), the garment beside it,
-            and the three "how it works" steps — one look, told twice
-    look-2  through look-7 — the results gallery, each output showing the
-            person and garment it came from
+    look-1        hero comparison slider (person -> result), the garment
+                  beside it, and the "how it works" steps
+    look-2 to 7   the results gallery, each output showing the person and
+                  garment it came from
+    look-8, 9     the "how it works" picker only — no gallery tile yet
 
-  Adding an eighth look: copy a gallery <figure> in the RESULTS section of
-  index.html and change the 7 to an 8. Nothing else needs touching.
+  Adding a tenth look: drop the three files in, then add one <button> to each
+  of the two `.picks` rows in the HOW IT WORKS section. The script builds the
+  path from the number on the button, so nothing else needs touching. A
+  gallery tile is a separate copy-paste in the RESULTS section.
 
-  These were PNGs totalling 3.06 MB. Re-encoded as WebP at quality 82 they
-  come to 0.23 MB — 93% smaller, with no visible difference. Export
-  replacements as WebP too; a PNG here costs about ten times its worth.
+  SAVE THESE AS ACTUAL WEBP. All 27 arrived once as JPEG carrying a .webp
+  extension, which the browser mostly gets away with by sniffing — but the
+  server sets Content-Type from the extension, so the file is lying to every
+  client that trusts it, and none of the compression is real: 3.42 MB of
+  JPEG became 0.57 MB once genuinely encoded. In Photoshop or Squoosh, pick
+  WebP in the format list rather than typing .webp into the filename.
 
 in use
 ──────────────────────────────────────────────────────────────────────────
