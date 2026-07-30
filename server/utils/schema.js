@@ -28,6 +28,13 @@ function base({ required = false, label = 'This field', fallback = null }, parse
         if (required) throw new Error(`${label} is required.`);
         return fallback;
       }
+      // JSON bodies can carry any type, and String() turns most of them into
+      // something that looks plausible: ["a@b.com"] becomes "a@b.com" and
+      // passes an email check, {a:1} becomes "[object Object]" and is stored.
+      // Only scalars are ever a real answer to a form field.
+      if (typeof raw === 'object' || typeof raw === 'function') {
+        throw new Error(`${label} is not valid.`);
+      }
       return parse(raw);
     },
   };

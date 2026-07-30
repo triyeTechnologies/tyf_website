@@ -12,9 +12,25 @@ import { renderAdminPage, renderLoginPage } from '../views/admin.view.js';
 
 const PAGE_SIZE = 50;
 
-/** Only ever redirect to a path on this site. */
-const safeNext = (value) =>
-  typeof value === 'string' && /^\/(?!\/)/.test(value) ? value : '/admin';
+/**
+ * Only ever redirect to a path on this site.
+ *
+ * One leading slash, and the next character must not be another slash OR a
+ * backslash. `//evil.example` is the obvious protocol-relative trick;
+ * `/\evil.example` is the same attack spelled differently, because browsers
+ * normalise backslashes to forward slashes before resolving. Rejecting only
+ * the first leaves an open redirect on the admin sign-in page, which is
+ * exactly where one is worth the most to a phisher.
+ *
+ * Control characters are refused too: CR and LF in a Location header are
+ * where response splitting starts.
+ */
+const safeNext = (value) => {
+  if (typeof value !== 'string') return '/admin';
+  if (!/^\/(?![/\\])/.test(value)) return '/admin';
+  if ([...value].some((ch) => ch.charCodeAt(0) < 32 || ch.charCodeAt(0) === 127)) return '/admin';
+  return value;
+};
 
 export function loginPage(req, res) {
   if (isAuthorised(req)) {
