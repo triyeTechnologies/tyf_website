@@ -36,7 +36,7 @@ const ANCIENT_UA =
 const FAMILIES = { display: 'Bricolage+Grotesque:800', body: 'Inter:400' };
 
 const BLACK = '#0A0A0C';
-const NEON = '#C2FF33';
+const NEON = '#A35C7A';
 const WHITE = '#FFFFFF';
 const MUTED = 'rgba(255,255,255,0.62)';
 
@@ -85,14 +85,14 @@ const card = el('div', {
   el('div', {
     style: {
       position: 'absolute', top: '-260px', left: '-160px', width: '760px', height: '760px',
-      borderRadius: '9999px', background: 'radial-gradient(circle closest-side, rgba(194,255,51,0.20), rgba(194,255,51,0))',
+      borderRadius: '9999px', background: 'radial-gradient(circle closest-side, rgba(163,92,122,0.20), rgba(163,92,122,0))',
       display: 'flex',
     },
   }),
   el('div', {
     style: {
       position: 'absolute', bottom: '-320px', right: '-180px', width: '720px', height: '720px',
-      borderRadius: '9999px', background: 'radial-gradient(circle closest-side, rgba(194,255,51,0.13), rgba(194,255,51,0))',
+      borderRadius: '9999px', background: 'radial-gradient(circle closest-side, rgba(163,92,122,0.13), rgba(163,92,122,0))',
       display: 'flex',
     },
   }),

@@ -22,8 +22,11 @@ export const THEME = raw(`
 
   :root{
     /* the same three colours as the public site */
-    --black:#0A0A0C; --white:#FFFFFF; --neon:#C2FF33;
-    --neon-glow:rgba(194,255,51,.34);
+    --black:#0A0A0C; --white:#FFFFFF; --neon:#A35C7A;
+    /* The accent lightened, for text small enough to read rather than look
+       at: #A35C7A on this background is 4.12:1 and fails AA at body size. */
+    --neon-deep:#B1748E;
+    --neon-glow:rgba(163,92,122,.34);
     --line:rgba(255,255,255,.14); --muted:rgba(255,255,255,.6);
     --glass:rgba(255,255,255,.05); --glass-hi:rgba(255,255,255,.16);
     --disp:'Bricolage Grotesque',system-ui,sans-serif;
@@ -36,8 +39,8 @@ export const THEME = raw(`
   /* a faint neon haze, so the frosted panels have something to blur */
   body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
     background:
-      radial-gradient(60% 40% at 8% 0%,rgba(194,255,51,.11),transparent 70%),
-      radial-gradient(50% 40% at 96% 100%,rgba(194,255,51,.07),transparent 70%)}
+      radial-gradient(60% 40% at 8% 0%,rgba(163,92,122,.11),transparent 70%),
+      radial-gradient(50% 40% at 96% 100%,rgba(163,92,122,.07),transparent 70%)}
   body > *{position:relative;z-index:1}
   a{color:inherit;text-decoration:none}
   h1,h2,h3,.disp{font-family:var(--disp);font-weight:800;letter-spacing:-.04em;line-height:1.02}
@@ -60,7 +63,7 @@ export const THEME = raw(`
     transition:background .2s var(--e),color .2s var(--e),border-color .2s var(--e),
       transform .2s var(--e),box-shadow .2s var(--e)}
   .btn:hover{border-color:var(--neon);transform:translateY(-1px);box-shadow:0 8px 24px -10px var(--neon-glow)}
-  .btn.primary{background:var(--neon);color:var(--black);border-color:var(--neon)}
+  .btn.primary{background:var(--neon);color:var(--white);border-color:var(--neon)}
   .btn.primary:hover{box-shadow:0 10px 28px -8px var(--neon-glow)}
   .btn.ghost{background:transparent}
   .btn.ghost:hover{background:rgba(255,255,255,.08)}
@@ -69,7 +72,7 @@ export const THEME = raw(`
     backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
     border:1px solid var(--line);border-radius:10px;padding:9px 13px;outline:none;
     transition:border-color .2s,box-shadow .2s}
-  input:focus,select:focus,textarea:focus{border-color:var(--neon);box-shadow:0 0 0 3px rgba(194,255,51,.18)}
+  input:focus,select:focus,textarea:focus{border-color:var(--neon);box-shadow:0 0 0 3px rgba(163,92,122,.18)}
   select{cursor:pointer}
   select option{background:#141418;color:var(--white)}
 
