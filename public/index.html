@@ -9,14 +9,57 @@
 <meta name="color-scheme" content="light">
 <link rel="canonical" href="https://tryyourfit.in/">
 <meta property="og:type" content="website">
+<meta property="og:site_name" content="Try your Fit">
+<meta property="og:url" content="https://tryyourfit.in/">
 <meta property="og:title" content="Try your Fit — wear it before you buy it">
 <meta property="og:description" content="Two photos in. You, wearing it, out.">
-<meta property="og:image" content="images/og.jpg">
+<!-- Absolute, always: WhatsApp, LinkedIn, Slack and X fetch this from their own
+     servers, where a relative path resolves against nothing. This currently
+     points at a product still, which is a stand-in — a purpose-made 1200x630
+     card belongs here, and until one exists previews will be centre-cropped. -->
+<meta property="og:image" content="https://tryyourfit.in/images/showcase/look-1-result.png">
+<meta property="og:image:alt" content="A person shown wearing a garment rendered by Try your Fit">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://tryyourfit.in/images/showcase/look-1-result.png">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230A0A0C'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23C2FF33'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!-- Tells Google this is a company with a product rather than an unlabelled
+     page, which is what lets a result carry a name and logo instead of a bare
+     blue link. Keep the URLs here in step with the canonical tag above. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://tryyourfit.in/#organisation",
+      "name": "Triye Technologies",
+      "url": "https://triyetech.com/",
+      "description": "Applied computer vision studio in Bengaluru, India.",
+      "foundingLocation": { "@type": "Place", "name": "Bengaluru, India" }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://tryyourfit.in/#website",
+      "url": "https://tryyourfit.in/",
+      "name": "Try your Fit",
+      "description": "Virtual try-on built in India. Two photos in, you wearing it out.",
+      "publisher": { "@id": "https://tryyourfit.in/#organisation" }
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "Try your Fit",
+      "applicationCategory": "ShoppingApplication",
+      "operatingSystem": "Web, iOS, Android",
+      "description": "Photograph your wardrobe once, then see any garment on yourself in about ten seconds.",
+      "publisher": { "@id": "https://tryyourfit.in/#organisation" }
+    }
+  ]
+}
+</script>
 
 <!-- Everything that starts hidden (reveals, hero staging, the preloader) is
      scoped to .js, so a scripting failure leaves a complete, readable page

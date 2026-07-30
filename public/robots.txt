@@ -1,0 +1,13 @@
+# Try your Fit
+#
+# The marketing site is meant to be indexed. The admin console and the API are
+# not: /admin already answers with `X-Robots-Tag: noindex` and a token gate,
+# which is what actually keeps it out of search — this file is only the polite
+# request that comes first.
+
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+Sitemap: https://tryyourfit.in/sitemap.xml

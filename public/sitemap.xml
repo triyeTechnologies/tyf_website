@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  One page, so one entry. The in-page sections (#how, #demo, #pricing …) are
+  not separate URLs and do not belong here — listing anchors as pages is a
+  common way to look spammy to a crawler for no benefit.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://tryyourfit.in/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>
